@@ -8,10 +8,11 @@ router.get("/", (req, res) => {
   return res.send("Ola, Dev");
 });
 
-router.post(
-  "/usuario",
-  UsuariosController.createValidation,
-  UsuariosController.create
-);
+router.get("/usuario",UsuariosController.getAllValidation,UsuariosController.getAll);
+router.get("/usuario/:id",UsuariosController.getByIdValidation,UsuariosController.getById);
+router.put("/usuario/:id",UsuariosController.updateByIdValidation,UsuariosController.updateById);
+router.delete("/usuario/:id",UsuariosController.deleteByIdValidation,UsuariosController.deleteById);
+router.post("/usuario",UsuariosController.createValidation,UsuariosController.create);
 
 export { router };
+ 

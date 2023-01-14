@@ -13,7 +13,9 @@ type TGetAllSchemas = (getSchema: TGetSchema) => Partial<TAllSchemas>;
 //partial permite que não sejam passados todos os argumentos
 type TValidation = (getAllSchemas: TGetAllSchemas) => RequestHandler; 
 
-export const validation: TValidation = (schemas) => async (req, res, next) => {
+export const validation: TValidation = (getAllSchemas) => async (req, res, next) => {
+  const schemas = getAllSchemas(schema => schema)
+
   const errorsResult: Record<string, Record<string,string>> = {};
 
   //Array do objeto pra testar todas as possiveis entradas
