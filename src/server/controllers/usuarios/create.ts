@@ -21,5 +21,5 @@ export const createValidation = validation((getSchema) => ({
 
 //cria o usuário
 export const create = async (req: Request<{}, {}, IUsuario>, res: Response) => {
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("Método ainda não implementado");
+  return res.status(StatusCodes.CREATED).json("Método ainda não implementado");
 };
