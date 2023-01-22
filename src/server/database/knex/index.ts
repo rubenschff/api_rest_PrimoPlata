@@ -1,5 +1,5 @@
 import {knex} from "knex" 
-import { develop, teste, production  } from "./enviroments"
+import { teste, production, development } from "./enviroments"
 
 
 const getEnviroment = () =>{
@@ -7,7 +7,7 @@ const getEnviroment = () =>{
         case 'production': return production;
         case 'teste': return teste;
             
-        default: return develop;
+        default: return development;
     }
 }
 
