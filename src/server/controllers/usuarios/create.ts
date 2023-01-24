@@ -2,8 +2,9 @@ import { Request, RequestHandler, Response, query, request } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as yup from "yup";
 import { validation } from "../../shared/middleware";
+import {IUsuario} from "../../database/models";
 
-interface IUsuario {
+interface IBodyProps extends Omit<IUsuario, 'id'> {
   nome: string;
   nick: string;
   password: string;
@@ -11,7 +12,7 @@ interface IUsuario {
 }
 
 export const createValidation = validation((getSchema) => ({
-  body: getSchema<IUsuario>(yup.object().shape({
+  body: getSchema<IBodyProps>(yup.object().shape({
     nome: yup.string().required().min(3),
     nick: yup.string().required().min(6),
     password: yup.string().required().min(6),
@@ -20,6 +21,6 @@ export const createValidation = validation((getSchema) => ({
 }));
 
 //cria o usuário
-export const create = async (req: Request<{}, {}, IUsuario>, res: Response) => {
+export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
   return res.status(StatusCodes.CREATED).json("Método ainda não implementado");
 };
