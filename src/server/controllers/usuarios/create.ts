@@ -3,24 +3,36 @@ import { StatusCodes } from "http-status-codes";
 import * as yup from "yup";
 import { validation } from "../../shared/middleware";
 import {IUsuario} from "../../database/models";
+import {UsuarioProvider} from "../../database/providers/usuario";
 
 interface IBodyProps extends Omit<IUsuario, 'id'> {
-  nome: string;
-  nick: string;
+  name: string;
+  nickName: string;
   password: string;
-  date_of_birth: Date;
+  dateOfBirth: Date;
 }
 
 export const createValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
-    nome: yup.string().required().min(3),
-    nick: yup.string().required().min(6),
+    name: yup.string().required().min(3).max(150),
+    nickName: yup.string().required().min(6),
     password: yup.string().required().min(6),
-    date_of_birth: yup.date().required(),
+    dateOfBirth: yup.date().required(),
   })),
 }));
 
 //cria o usuário
 export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
-  return res.status(StatusCodes.CREATED).json("Método ainda não implementado");
+  const result = await UsuarioProvider.create(req.body);
+
+  if (result instanceof Error){
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      errors:{
+        default: result.message
+      }
+    });
+  }
+
+
+  return res.status(StatusCodes.CREATED).json(result);
 };

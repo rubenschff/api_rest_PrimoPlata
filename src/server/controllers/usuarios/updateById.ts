@@ -8,9 +8,9 @@ interface IParamProperties {
   id? : number;
 }
 
-interface IBodyPropeties extends Omit<IUsuario, 'id' | 'date_of_birth'>{
-    nome?: string,
-    nick?: string,
+interface IBodyPropeties extends Omit<IUsuario, 'id' | 'dateOfBirth'>{
+    name?: string,
+    nickName?: string,
     password?: string,
 
 }
@@ -20,8 +20,8 @@ export const updateByIdValidation = validation((getSchema) => ({
     id: yup.number().integer().required().moreThan(0),
   })),
   body: getSchema<IBodyPropeties>(yup.object().shape({
-    nome: yup.string().notRequired().min(3),
-    nick: yup.string().notRequired().min(6),
+    name: yup.string().notRequired().min(3).max(150),
+    nickName: yup.string().notRequired().min(6),
     password: yup.string().notRequired().min(4),
   })),
 }));
