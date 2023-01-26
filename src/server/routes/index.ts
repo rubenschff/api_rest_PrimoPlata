@@ -11,6 +11,7 @@ router.get("/", (req, res) => {
 router.get("/usuario",UsuariosController.getAllValidation,UsuariosController.getAll);
 router.get("/usuario/:id",UsuariosController.getByIdValidation,UsuariosController.getById);
 router.put("/usuario/:id",UsuariosController.updateByIdValidation,UsuariosController.updateById);
+// @ts-ignore
 router.delete("/usuario/:id",UsuariosController.deleteByIdValidation,UsuariosController.deleteById);
 router.post("/usuario",UsuariosController.createValidation,UsuariosController.create);
 
