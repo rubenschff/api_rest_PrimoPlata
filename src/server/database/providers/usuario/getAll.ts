@@ -2,13 +2,13 @@ import { ETableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
 import { IUsuario } from "../../models";
 
-export const getAll = async (page: number, limit: number, filter: string, id: 0 ): Promise<IUsuario[]|Error> => {
+export const getAll = async (page: number, limit: number, filter: string, id: number ): Promise<IUsuario[]|Error> => {
     try {
 
         const result = await Knex(ETableNames.usuario)
-        .select('*')
+        .select("id","name","nickName","dateOfBirth")
         .where('id', Number(id))
-        .orWhere('nome', 'like', `%${filter}%`)
+        .orWhere('name', 'like', `%${filter}%`)
         .offset((page -1) * limit,)
         .limit(limit);
 
