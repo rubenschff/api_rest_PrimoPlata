@@ -17,7 +17,16 @@ export const deleteByIdValidation = validation((getSchema) => ({
 
 //cria o usuário
 export const deleteById = async (req: Request<IParamProperties>, res: Response) => {
-  const result = await UsuarioProvider.deleteById(req.params);
+
+  if (!req.params.id){
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      default:{
+        error: 'O campo "id" precisa ser informado na URL'
+      }  
+    })
+  }
+
+  const result = await UsuarioProvider.deleteById(req.params.id);
 
   if (result instanceof Error){
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -28,5 +37,5 @@ export const deleteById = async (req: Request<IParamProperties>, res: Response) 
   }
 
 
-  return res.status(StatusCodes.OK).json(result);
+  return res.status(StatusCodes.NO_CONTENT).send();
 };

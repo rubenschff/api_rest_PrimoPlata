@@ -9,7 +9,9 @@ router.get("/", (req, res) => {
 });
 
 router.get("/usuario",UsuariosController.getAllValidation,UsuariosController.getAll);
+// @ts-ignore
 router.get("/usuario/:id",UsuariosController.getByIdValidation,UsuariosController.getById);
+// @ts-ignore
 router.put("/usuario/:id",UsuariosController.updateByIdValidation,UsuariosController.updateById);
 // @ts-ignore
 router.delete("/usuario/:id",UsuariosController.deleteByIdValidation,UsuariosController.deleteById);
