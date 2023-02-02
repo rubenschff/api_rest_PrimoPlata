@@ -1,3 +1,4 @@
+import { passwordCrypto } from "../../../shared/services";
 import { ETableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
 import { IUsuario } from "../../models";
@@ -6,7 +7,11 @@ export const updateById = async (
   id: number,
   usuario: Omit<IUsuario, "id">
 ): Promise<void | Error> => {
+
   try {
+    if(usuario.password){
+      usuario.password = await passwordCrypto.hashPassword(usuario.password!);
+    }
     const result = await Knex(ETableNames.usuario)
       .update(usuario)
       .where("id", "=", id);
