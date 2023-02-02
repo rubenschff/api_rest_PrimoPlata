@@ -15,7 +15,10 @@ router.get("/usuario/:id",UsuariosController.getByIdValidation,UsuariosControlle
 router.put("/usuario/:id",UsuariosController.updateByIdValidation,UsuariosController.updateById);
 // @ts-ignore
 router.delete("/usuario/:id",UsuariosController.deleteByIdValidation,UsuariosController.deleteById);
-router.post("/usuario",UsuariosController.createValidation,UsuariosController.create);
+
+router.post("/cadastrar",UsuariosController.createValidation,UsuariosController.create);
+
+router.post("/entrar", UsuariosController.loginValidation,UsuariosController.login);
 
 export { router };
  

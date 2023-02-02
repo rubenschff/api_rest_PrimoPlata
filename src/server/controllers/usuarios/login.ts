@@ -1,0 +1,46 @@
+import { Request, RequestHandler, Response, query, request } from "express";
+import { IUsuario } from "../../database/models";
+import { validation } from "../../shared/middleware";
+import * as yup from "yup";
+import { UsuarioProvider } from "../../database/providers/usuario";
+import { StatusCodes } from "http-status-codes";
+import { passwordCrypto } from "../../shared/services";
+
+
+interface IBodyProps extends Omit<IUsuario, 'id'|'name'|'dateOfBirth'> {  }
+
+export const loginValidation = validation((getSchema) => ({
+    body: getSchema<IBodyProps>(yup.object().shape({
+      nickName: yup.string().required().min(6),
+      password: yup.string().required().min(6),
+    })),
+  }));  
+
+export const login = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
+
+    const{nickName, password} = req.body;
+
+    const result = await UsuarioProvider.getByNickName(nickName!);
+
+    if (result instanceof Error){
+        return res.status(StatusCodes.NOT_FOUND).json({
+          errors:{
+            default: 'Usuário não cadastrado!'
+          }
+        });
+      }
+      
+    const checkPassword = await passwordCrypto.verifyPassword(password!, result.password!);
+      if (!checkPassword) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+            errors:{
+              default: 'Senha incorreta!'
+            }
+          });
+      } else {
+            return res.status(StatusCodes.OK).json({
+                accessToken: 'autorizado.autorizado.autorizado'
+            })
+      }
+
+}

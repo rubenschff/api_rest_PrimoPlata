@@ -4,6 +4,7 @@ import * as deleteById from "./deleteById";
 import * as getAll from './getAll';
 import * as getById  from './getById';
 import * as updateById  from './updateById';
+import * as getByNickName from './getByNickName';
 
 export const UsuarioProvider = {
     ...create,
@@ -11,5 +12,7 @@ export const UsuarioProvider = {
     ...getAll,
     ...getById,
     ...updateById,
-    ...count
+    ...count,
+    ...getByNickName,
+    
 }
