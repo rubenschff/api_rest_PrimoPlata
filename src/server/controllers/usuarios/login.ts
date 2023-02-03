@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { UsuarioProvider } from "../../database/providers/usuario";
 import { StatusCodes } from "http-status-codes";
 import { passwordCrypto } from "../../shared/services";
+import { JWTservice } from "../../shared/services/JWTservice";
 
 
 interface IBodyProps extends Omit<IUsuario, 'id'|'name'|'dateOfBirth'> {  }
@@ -20,9 +21,9 @@ export const login = async (req: Request<{}, {}, IBodyProps>, res: Response) => 
 
     const{nickName, password} = req.body;
 
-    const result = await UsuarioProvider.getByNickName(nickName!);
+    const usuario = await UsuarioProvider.getByNickName(nickName!);
 
-    if (result instanceof Error){
+    if (usuario instanceof Error){
         return res.status(StatusCodes.NOT_FOUND).json({
           errors:{
             default: 'Usuário não cadastrado!'
@@ -30,7 +31,7 @@ export const login = async (req: Request<{}, {}, IBodyProps>, res: Response) => 
         });
       }
       
-    const checkPassword = await passwordCrypto.verifyPassword(password!, result.password!);
+    const checkPassword = await passwordCrypto.verifyPassword(password!, usuario.password!);
       if (!checkPassword) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
             errors:{
@@ -38,8 +39,9 @@ export const login = async (req: Request<{}, {}, IBodyProps>, res: Response) => 
             }
           });
       } else {
+            const accessToken = await JWTservice.sign({uid: usuario.id})
             return res.status(StatusCodes.OK).json({
-                accessToken: 'autorizado.autorizado.autorizado'
+                accessToken: accessToken
             })
       }
 

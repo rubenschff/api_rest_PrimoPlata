@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
+import { JWTservice } from "../services/JWTservice";
 
 
 export const autenticateRoutes: RequestHandler = async (req, res, next) =>{
@@ -17,13 +18,18 @@ export const autenticateRoutes: RequestHandler = async (req, res, next) =>{
 
     if(type !== 'Bearer'){
         return res.status(StatusCodes.UNAUTHORIZED).json({
-            errors: {default: 'Não autenticado!'}
+            errors: {default: 'Não autenticado'}
         })
     }
 
-    if(token !== 'autorizado.autorizado.autorizado'){
+    const authenticate = JWTservice.verify(token)
+    if(authenticate === "JWT_SECRET_NOT_FOUND"){
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            errors: {default: 'Erro ao verificar token'}
+        })
+    }else if(authenticate === "INVALID_TOKEN"){
         return res.status(StatusCodes.UNAUTHORIZED).json({
-            errors: {default: 'Não autenticado!'}
+            errors: {default: 'Não autenticado'}
         })
     }
 
