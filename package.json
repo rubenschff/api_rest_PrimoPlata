@@ -9,6 +9,7 @@
   "scripts": {
     "start": "ts-node-dev ./src/index.ts",
     "production": " node ./build/index.js",
+    "migrate:make": "knex --knexfile ./src/server/database/knex/enviroments.ts migrate:make",
     "knex:migrate": "knex --knexfile ./src/server/database/knex/enviroments.ts migrate:latest",
     "knex:rollback": "knex --knexfile ./src/server/database/knex/enviroments.ts migrate:rollback",
     "knex:rollback-all": "knex --knexfile ./src/server/database/knex/enviroments.ts migrate:rollback --all",

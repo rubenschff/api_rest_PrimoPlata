@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UsuariosController } from "../controllers";
+import { InvestimentoController, UsuariosController } from "../controllers";
 import { StatusCodes } from "http-status-codes";
 import { autenticateRoutes } from "../shared/middleware";
 
@@ -20,6 +20,9 @@ router.delete("/usuario/:id",autenticateRoutes,UsuariosController.deleteByIdVali
 router.post("/cadastrar",UsuariosController.createValidation,UsuariosController.create);
 
 router.post("/entrar", UsuariosController.loginValidation,UsuariosController.login);
+
+router.post("/investimento", InvestimentoController.createValidation, InvestimentoController.create);
+router.get("/investimento", InvestimentoController.getAllValidation, InvestimentoController.getAll);
 
 export { router };
  
