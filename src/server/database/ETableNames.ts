@@ -1,4 +1,6 @@
 export enum ETableNames{
     usuario = 'usuario',
-    investimento = 'investimento'
+    investimento = 'investimento',
+    perguntas = 'perguntas',
+    alternativas = 'alternativas'
 }

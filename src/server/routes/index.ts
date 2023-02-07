@@ -2,6 +2,7 @@ import { Router } from "express";
 import { InvestimentoController, UsuariosController } from "../controllers";
 import { StatusCodes } from "http-status-codes";
 import { autenticateRoutes } from "../shared/middleware";
+import { PerguntasController } from "../controllers/perguntas";
 
 const router = Router();
 
@@ -21,8 +22,13 @@ router.post("/cadastrar",UsuariosController.createValidation,UsuariosController.
 
 router.post("/entrar", UsuariosController.loginValidation,UsuariosController.login);
 
+//investimentos
 router.post("/investimento", InvestimentoController.createValidation, InvestimentoController.create);
 router.get("/investimento", InvestimentoController.getAllValidation, InvestimentoController.getAll);
+
+
+//perguntas
+router.post("/perguntas", PerguntasController.createValidation, PerguntasController.create);
 
 export { router };
  
