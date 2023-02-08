@@ -9,7 +9,7 @@ export async function up(knex: Knex) {
             table.double('alternativa').index().notNullable();
             table.string('descricao').index().notNullable();
             table.string('explicacao').index().notNullable();
-            table.integer('perduntaId').references('perguntas.id').notNullable().onDelete('CASCADE')
+            table.integer('perguntaId').references('perguntas.id').notNullable().onDelete('CASCADE')
             table.timestamps(true, true,true);
         }).then(()=> {
         console.log(`# Created table ${ETableNames.alternativas}`);

@@ -25,6 +25,6 @@ interface IBodyProps extends Omit<IPerguntasDTO, 'id' > { }
 
 export const create = async (req: Request<{},{},IBodyProps>, res: Response) =>{
         const result = req.body;
-
+        // TODO - Implementear cadastro de perguntas via API se der tempo
         res.status(StatusCodes.OK).json(result);
 }
