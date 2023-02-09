@@ -8,20 +8,16 @@ export const getAll = async (page: number, limit: number, filter: string, id: nu
 
         let result = await Knex(ETableNames.perguntas)
         .select("id","descricao","alternativaCorreta","recompensa","explicacao")
-        .where('id', Number(id))
+        .where('id','=', Number(id))
         .orWhere('descricao', 'like', `%${filter}%`)
         .offset((page -1) * limit,)
         .limit(limit);
 
-        console.log(result.length);
 
-        //TODO ver com a nathi como repassar essa info
-        result.forEach(async (element) => {
-            const alternativas = await Knex(ETableNames.alternativas).select("alternativa", "descricao", "explicacao").where('perguntaId', '=', element.id);
-            // console.log(alternativas)
-            element["alternativas"] = alternativas
-            console.log(element)
-        });
+        for (let i = 0; i < result.length; i++) {
+            const alternativas = await Knex(ETableNames.alternativas).select("alternativa", "descricao", "explicacao").where('perguntaId', '=', result[i]['id']);
+            result[i]["alternativas"] = alternativas
+        }
         
 
         if(id>0 && result.every(item => item.id !== id)){
