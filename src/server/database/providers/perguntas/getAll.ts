@@ -15,17 +15,14 @@ export const getAll = async (page: number, limit: number, filter: string, id: nu
 
         console.log(result.length);
 
-        // await result.forEach(async(i)=>{
-        //     i["alternativas"]=''
-        // })
-
-        await result.forEach(async (result) => {
-            console.log(result.id);
-            const alternativas = await Knex(ETableNames.alternativas).select("alternativa", "descricao", "explicacao").where('perguntaId', '=', result.id);
-            result["alternativas"]=`${alternativas}`
+        //TODO ver com a nathi como repassar essa info
+        result.forEach(async (element) => {
+            const alternativas = await Knex(ETableNames.alternativas).select("alternativa", "descricao", "explicacao").where('perguntaId', '=', element.id);
+            // console.log(alternativas)
+            element["alternativas"] = alternativas
+            console.log(element)
         });
         
-        console.log(result)
 
         if(id>0 && result.every(item => item.id !== id)){
             const resultByID = await Knex(ETableNames.usuario)
