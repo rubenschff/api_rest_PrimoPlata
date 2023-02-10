@@ -3,4 +3,5 @@ export interface IAlternativaDTO {
     alternativa: number;
     descricao: string;
     explicacao: string;
+    perguntaId: number;
   }

@@ -1,8 +1,7 @@
 import { Router } from "express";
-import { InvestimentoController, UsuariosController } from "../controllers";
+import { InvestimentoController, UsuariosController, PerguntasController, AlternativaController } from "../controllers";
 import { StatusCodes } from "http-status-codes";
 import { autenticateRoutes } from "../shared/middleware";
-import { PerguntasController } from "../controllers/perguntas";
 
 const router = Router();
 
@@ -30,6 +29,9 @@ router.get("/investimento", InvestimentoController.getAllValidation, Investiment
 //perguntas
 router.post("/perguntas", PerguntasController.createValidation, PerguntasController.create);
 router.get("/perguntas", PerguntasController.getAllValidation, PerguntasController.getAll);
+
+//alternativa
+router.post("/alternativa", AlternativaController.createValidation, AlternativaController.create);
 
 export { router };
  

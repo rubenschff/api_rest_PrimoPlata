@@ -3,6 +3,7 @@ import * as yup from "yup"
 import { validation } from "../../shared/middleware";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { PerguntaProvider } from "../../database/providers/perguntas";
 
 
 interface IBodyProps extends Omit<IPerguntasDTO, 'id' > { }
@@ -13,18 +14,20 @@ interface IBodyProps extends Omit<IPerguntasDTO, 'id' > { }
       alternativaCorreta: yup.number().integer().required(),
       explicacao: yup.string().required(),
       recompensa: yup.number().integer().required(),
-      alternativas: yup.array().of(yup.object().shape({
-            alternativa: yup.number().integer().required(),
-            descricao: yup.string().required(),
-            explicacao: yup.string().required(),
-        })
-      ).compact((v) => !v.checked).required(),
-
     })),
   }));
 
 export const create = async (req: Request<{},{},IBodyProps>, res: Response) =>{
-        const result = req.body;
-        // TODO - Implementear cadastro de perguntas via API se der tempo
-        res.status(StatusCodes.OK).json(result);
+        const result = await PerguntaProvider.create(req.body)
+        
+        if (result instanceof Error){
+          return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            errors:{
+              default: result.message
+            }
+          });
+        }
+      
+      
+        return res.status(StatusCodes.CREATED).json(`ID da alternativa = ${result}`);
 }
