@@ -29,6 +29,8 @@ router.get("/investimento", InvestimentoController.getAllValidation, Investiment
 //perguntas
 router.post("/perguntas", PerguntasController.createValidation, PerguntasController.create);
 router.get("/perguntas", PerguntasController.getAllValidation, PerguntasController.getAll);
+// @ts-ignore
+router.delete("/perguntas/:id", PerguntasController.deleteByIdValidation, PerguntasController.deleteById);
 
 //alternativa
 router.post("/alternativa", AlternativaController.createValidation, AlternativaController.create);
