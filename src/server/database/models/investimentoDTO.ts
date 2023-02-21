@@ -1,4 +1,4 @@
-export interface investimentoDTO {
+export interface IinvestimentoDTO {
   id: number;
   descricao: string;
   risco: number;

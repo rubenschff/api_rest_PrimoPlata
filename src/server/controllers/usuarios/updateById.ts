@@ -44,5 +44,5 @@ export const updateById = async (req: Request<IParamProperties,{},IBodyPropeties
       });
     }
 
-  return res.status(StatusCodes.NO_CONTENT).json("Usuário atualizado");
+   return res.status(StatusCodes.NO_CONTENT).json({default: 'Usuário atualizado'})
 };

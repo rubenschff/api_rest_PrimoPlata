@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { InvestimentoController, UsuariosController } from "../controllers";
+import { InvestimentoController, UsuariosController, PerguntasController, AlternativaController } from "../controllers";
 import { StatusCodes } from "http-status-codes";
 import { autenticateRoutes } from "../shared/middleware";
 
@@ -21,8 +21,19 @@ router.post("/cadastrar",UsuariosController.createValidation,UsuariosController.
 
 router.post("/entrar", UsuariosController.loginValidation,UsuariosController.login);
 
+//investimentos
 router.post("/investimento", InvestimentoController.createValidation, InvestimentoController.create);
 router.get("/investimento", InvestimentoController.getAllValidation, InvestimentoController.getAll);
+
+
+//perguntas
+router.post("/perguntas", PerguntasController.createValidation, PerguntasController.create);
+router.get("/perguntas", PerguntasController.getAllValidation, PerguntasController.getAll);
+// @ts-ignore
+router.delete("/perguntas/:id", PerguntasController.deleteByIdValidation, PerguntasController.deleteById);
+
+//alternativa
+router.post("/alternativa", AlternativaController.createValidation, AlternativaController.create);
 
 export { router };
  

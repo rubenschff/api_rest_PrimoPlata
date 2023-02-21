@@ -1,8 +1,8 @@
 import { ETableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
-import { investimentoDTO } from "../../models";
+import { IinvestimentoDTO } from "../../models";
 
-export const getAll = async (page: number, limit: number, filter: string, id: number ): Promise<investimentoDTO[]|Error> => {
+export const getAll = async (page: number, limit: number, filter: string, id: number ): Promise<IinvestimentoDTO[]|Error> => {
     try {
 
         const result = await Knex(ETableNames.investimento)

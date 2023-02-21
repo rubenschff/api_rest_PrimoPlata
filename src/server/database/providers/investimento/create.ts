@@ -1,9 +1,9 @@
-import {IUsuario, investimentoDTO} from "../../models";
+import {IUsuario, IinvestimentoDTO} from "../../models";
 import  { Knex} from "../../knex";
 import {ETableNames} from "../../ETableNames";
 
 
-export const create = async (investimento: Omit<investimentoDTO, 'id'>): Promise<number| Error> => {
+export const create = async (investimento: Omit<IinvestimentoDTO, 'id'>): Promise<number| Error> => {
     try {
         const [result] = await Knex(ETableNames.investimento).insert(investimento).returning('id');
 
