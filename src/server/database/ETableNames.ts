@@ -3,6 +3,6 @@ export enum ETableNames{
     investimento = 'investimento',
     perguntas = 'perguntas',
     alternativas = 'alternativas',
-
-    accessLogs = 'accessLogs'
+    accessLogs = 'accessLogs',
+    comparacao = 'comparacao'
 }

@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { InvestimentoController, UsuariosController, PerguntasController, AlternativaController } from "../controllers";
+import {
+  InvestimentoController,
+  UsuariosController,
+  PerguntasController,
+  AlternativaController,
+  ComparativoController
+} from "../controllers";
 import { StatusCodes } from "http-status-codes";
 import { autenticateRoutes } from "../shared/middleware";
 
@@ -34,6 +40,10 @@ router.delete("/perguntas/:id", PerguntasController.deleteByIdValidation, Pergun
 
 //alternativa
 router.post("/alternativa", AlternativaController.createValidation, AlternativaController.create);
+
+//comparativo
+// @ts-ignore
+router.put("/comparativo/:id", ComparativoController.updateByIdValidation, ComparativoController.updateByUserId);
 
 export { router };
  
