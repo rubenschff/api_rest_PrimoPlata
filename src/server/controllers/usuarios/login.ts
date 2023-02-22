@@ -6,6 +6,7 @@ import { UsuarioProvider } from "../../database/providers/usuario";
 import { StatusCodes } from "http-status-codes";
 import { passwordCrypto } from "../../shared/services";
 import { JWTservice } from "../../shared/services/JWTservice";
+import {LogsProvider} from "../../database/providers/logs";
 
 
 interface IBodyProps extends Omit<IUsuario, 'id'|'name'|'dateOfBirth'> {  }
@@ -40,6 +41,7 @@ export const login = async (req: Request<{}, {}, IBodyProps>, res: Response) => 
           });
       } else {
             const accessToken = await JWTservice.sign({uid: usuario.id})
+            await LogsProvider.accessLog(usuario.id,accessToken)
             return res.status(StatusCodes.OK).json({
                 accessToken: accessToken
             })
