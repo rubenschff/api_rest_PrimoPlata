@@ -44,6 +44,7 @@ router.post("/alternativa", AlternativaController.createValidation, AlternativaC
 //comparativo
 // @ts-ignore
 router.put("/comparativo/:id", ComparativoController.updateByIdValidation, ComparativoController.updateByUserId);
+router.post("/comparativo", ComparativoController.createValidation, ComparativoController.create);
 
 export { router };
  

@@ -1,11 +1,11 @@
 import {IComparativoDTO} from "../../models/comparativo/ComparativoDTO";
-import {knex} from "knex";
+import { Knex } from "../../knex";
 import {ETableNames} from "../../ETableNames";
 
 
 export const updateByUserId = async (id: number,comparativo: Omit<IComparativoDTO, 'id'|'usuarioId'>): Promise<void|Error> => {
     try {
-        const update = await knex(ETableNames.comparacao).where('usuarioId','=',id).update(comparativo);
+        const update = await Knex(ETableNames.comparacao).update(comparativo).where('usuarioId','=',id);
 
         if (update > 0) {
             return} ;

@@ -9,7 +9,7 @@ export async function up(knex: Knex) {
             table.float('moedasRecebidas',2).index().notNullable().defaultTo(0);
             table.float('moedasTotais',2).index().notNullable().defaultTo(0);
             table.float('moedasDisponiveis',2).index().notNullable().defaultTo(0);
-            table.integer('usuarioId').references(ETableNames.usuario+'.id').notNullable().onDelete('CASCADE')
+            table.integer('usuarioId').references(ETableNames.usuario+'.id').notNullable().unique().onDelete('CASCADE');
             table.timestamps(true, true,true);
         }).then(()=> {
         console.log(`# Created table ${ETableNames.comparacao}`);

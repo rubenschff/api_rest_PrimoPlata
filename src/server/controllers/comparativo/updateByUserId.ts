@@ -16,9 +16,9 @@ export const updateByIdValidation = validation((getSchema) => ({
         id: yup.number().integer().required().moreThan(0),
     })),
     body: getSchema<IBodyPropeties>(yup.object().shape({
-        moedasDisponiveis: yup.number().integer().notRequired().moreThan(0),
-        moedasRecebidas: yup.number().integer().notRequired().moreThan(0),
-        moedasTotais: yup.number().integer().notRequired().moreThan(0),
+        moedasDisponiveis: yup.number().notRequired().moreThan(0),
+        moedasRecebidas: yup.number().notRequired().moreThan(0),
+        moedasTotais: yup.number().notRequired().moreThan(0),
     })),
 }));
 export const updateByUserId = async (req: Request<IParamProperties,{},IBodyPropeties>,res:Response) => {
