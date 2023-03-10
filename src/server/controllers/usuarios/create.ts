@@ -34,7 +34,5 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) =>
   }
 
 
-  return res.status(StatusCodes.CREATED).json({
-    accessToken: result
-  });
+  return res.status(StatusCodes.CREATED).json(result);
 };
