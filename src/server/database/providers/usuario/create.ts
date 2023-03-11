@@ -10,10 +10,9 @@ export const create = async (usuario: Omit<IUsuario, 'id'>): Promise<object| Err
         const hashedPassword = await passwordCrypto.hashPassword(usuario.password!);
         const [result] = await Knex(ETableNames.usuario).insert({...usuario, password: hashedPassword}).returning('id');
         const accessToken = JWTservice.sign({uid: result.id})
-        console.log(result);
 
         if(typeof result === 'object') {
-            return [{id:result.id,accessToken: accessToken}];
+            return {id:result.id,accessToken: accessToken};
         }
 
         return Error('Erro ao inserir registro');

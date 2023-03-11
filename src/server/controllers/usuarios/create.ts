@@ -33,6 +33,6 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) =>
     });
   }
 
-
+  console.log(result)
   return res.status(StatusCodes.CREATED).json(result);
 };
