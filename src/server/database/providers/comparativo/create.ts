@@ -5,9 +5,9 @@ import {ComparativoProvider} from "./index";
 
 
 export const create = async (comparativo: Omit<IComparativoDTO, 'id'>): Promise<number| Error> => {
+    console.log(comparativo)
     try {
         const update = await verifyUser(comparativo);
-        console.log(update)
         if(typeof update === 'number'){
             return update;
         }
@@ -29,7 +29,7 @@ const verifyUser = async (comparativo: Omit<IComparativoDTO, 'id'>):Promise<numb
     try {
         const verify = await Knex(ETableNames.comparacao).select().where('usuarioId','=',comparativo.usuarioId)
         console.log(verify)
-        if (verify) {
+        if (!verify) {
             const {usuarioId: _, ...newObj} = comparativo;
             const update = await ComparativoProvider.updateByUserId(comparativo.usuarioId, newObj)
             if (update instanceof Error) {

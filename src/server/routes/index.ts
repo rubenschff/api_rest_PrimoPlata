@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
 
 router.get("/usuario",autenticateRoutes,UsuariosController.getAllValidation,UsuariosController.getAll);
 // @ts-ignore
-router.get("/usuario/:id",autenticateRoutes,UsuariosController.getByIdValidation,UsuariosController.getById);
+router.get("/usuario/:id",UsuariosController.getByIdValidation,UsuariosController.getById);
 // @ts-ignore
 router.put("/usuario/:id",autenticateRoutes,UsuariosController.updateByIdValidation,UsuariosController.updateById);
 // @ts-ignore
@@ -45,6 +45,8 @@ router.post("/alternativa", AlternativaController.createValidation, AlternativaC
 // @ts-ignore
 router.put("/comparativo/:id", ComparativoController.updateByIdValidation, ComparativoController.updateByUserId);
 router.post("/comparativo", ComparativoController.createValidation, ComparativoController.create);
+// @ts-ignore
+router.get("/comparativo/:userId", ComparativoController.getByUserIdValidation, ComparativoController.getByUserId)
 
 export { router };
  
