@@ -26,6 +26,7 @@ export const getById = async (req: Request<IParamProperties>, res: Response) => 
   }
 
   const getUser = await UsuarioProvider.getById(req.params.id);
+  console.log(getUser);
   if(getUser instanceof Error){
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       default:{
@@ -33,6 +34,5 @@ export const getById = async (req: Request<IParamProperties>, res: Response) => 
       }
     });
   }
-    console.log(getUser);
   return res.status(StatusCodes.OK).json(getUser);
 };
