@@ -1,30 +1,17 @@
 import { Knex } from "knex";
 import path from "path";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export const development: Knex.Config = {
-  client: 'sqlite3',
-  useNullAsDefault: true,
-  connection: {
-    filename: path.resolve(
-      __dirname,
-      "..",
-      "..",
-      "..",
-      "..",
-      "database.sqlite"
-    ),
-  },
+  client: 'pg',
+  searchPath: ['knex', 'public'],
+  connection: process.env.DB_CONNECTION,
   migrations: {
     directory: path.resolve(__dirname, "..", "migrations"),
   },
   seeds: {
     directory: path.resolve(__dirname, "..", "seeds"),
-  },
-  pool: {
-    afterCreate: (connection: any, done: Function) => {
-      connection.run("PRAGMA foreign_keys = ON");
-      done();
-    },
   },
 };
 
