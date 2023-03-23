@@ -15,7 +15,7 @@ export const getAll = async (page: number, limit: number, filter: string, id: nu
 
 
         for (let i = 0; i < result.length; i++) {
-            const alternativas = await Knex(ETableNames.alternativas).select("alternativa", "descricao", "explicacao").where('perguntaId', '=', result[i]['id']);
+            const alternativas = await Knex(ETableNames.alternativas).select("id", "descricao", "explicacao").where('perguntaId', '=', result[i]['id']);
             result[i]["alternativas"] = alternativas
         }
         

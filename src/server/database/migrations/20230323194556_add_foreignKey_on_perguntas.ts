@@ -5,7 +5,7 @@ import { ETableNames } from '../ETableNames';
 export async function up(knex: Knex) {
     return knex.schema.table(ETableNames.perguntas,
         table => {
-            table.integer('alternativaCorreta').unsigned().references('id').inTable(ETableNames.alternativas).notNullable().onDelete('SET NULL');
+            table.integer('alternativaCorreta').unsigned().references('id').inTable(ETableNames.alternativas).onDelete('SET NULL').defaultTo(null);
         }).then(()=> {
         console.log(`# Alter table ${ETableNames.perguntas}`);
     });
