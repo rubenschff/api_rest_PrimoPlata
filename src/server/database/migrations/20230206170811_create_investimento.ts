@@ -6,7 +6,7 @@ export async function up(knex: Knex) {
     return knex.schema.createTable(ETableNames.investimento,
         table => {
             table.bigIncrements('id').primary().index();
-            table.string('descricao').index().notNullable();
+            table.text('descricao').index().notNullable();
             table.double('risco').index().notNullable();
             table.double('juro').index().notNullable();
             table.double('liquidez').index().notNullable();

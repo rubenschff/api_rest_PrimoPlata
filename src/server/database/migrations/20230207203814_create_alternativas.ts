@@ -6,9 +6,8 @@ export async function up(knex: Knex) {
     return knex.schema.createTable(ETableNames.alternativas,
         table => {
             table.bigIncrements('id').primary().index();
-            table.double('alternativa').index().notNullable();
-            table.string('descricao').index().notNullable();
-            table.string('explicacao').index().notNullable();
+            table.text('descricao').index().notNullable();
+            table.text('explicacao').index().notNullable();
             table.integer('perguntaId').references('perguntas.id').notNullable().onDelete('CASCADE')
             table.timestamps(true, true,true);
         }).then(()=> {
