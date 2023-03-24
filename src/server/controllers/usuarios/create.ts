@@ -23,16 +23,26 @@ export const createValidation = validation((getSchema) => ({
 
 //cria o usuário
 export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
-  const result = await UsuarioProvider.create(req.body);
 
-  if (result instanceof Error){
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      errors:{
-        default: result.message
-      }
-    });
+  const usuario = await UsuarioProvider.getByNickName(req.body.nickName);
+
+  if (usuario instanceof Error){
+    const result = await UsuarioProvider.create(req.body);
+
+    if (result instanceof Error){
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        errors:{
+          default: result.message
+        }
+      });
+    }
+    console.log(result)
+    return res.status(StatusCodes.CREATED).json(result);
   }
 
-  console.log(result)
-  return res.status(StatusCodes.CREATED).json(result);
+  return res.status(StatusCodes.UNAUTHORIZED).json({
+    errors:{
+      default: 'Usuário ja cadastrado!'
+    }
+  });
 };
