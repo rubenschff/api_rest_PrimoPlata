@@ -4,5 +4,6 @@ export enum ETableNames{
     perguntas = 'perguntas',
     alternativas = 'alternativas',
     accessLogs = 'accessLogs',
-    comparacao = 'comparacao'
+    comparacao = 'comparacao',
+    pergunta_resposta= 'pergunta_resposta'
 }

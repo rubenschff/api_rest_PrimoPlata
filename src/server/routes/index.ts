@@ -8,6 +8,7 @@ import {
 } from "../controllers";
 import { StatusCodes } from "http-status-codes";
 import { autenticateRoutes } from "../shared/middleware";
+import {RespostasController} from "../controllers/respostas";
 
 const router = Router();
 
@@ -46,7 +47,10 @@ router.post("/alternativa", AlternativaController.createValidation, AlternativaC
 router.put("/comparativo/:id", ComparativoController.updateByIdValidation, ComparativoController.updateByUserId);
 router.post("/comparativo", ComparativoController.createValidation, ComparativoController.create);
 // @ts-ignore
-router.get("/comparativo/:userId", ComparativoController.getByUserIdValidation, ComparativoController.getByUserId)
+router.get("/comparativo/:userId", ComparativoController.getByUserIdValidation, ComparativoController.getByUserId);
+
+//-------------------------------------------------Perguntas Respostas-------------------------------------------------
+router.post("/perguntas/resposta", RespostasController.createValidation, RespostasController.create);
 
 export { router };
  
