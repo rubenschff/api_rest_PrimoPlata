@@ -11,7 +11,6 @@ export async function seed(knex: Knex): Promise<void> {
       id: 1,
       descricao:
         "<p>Se você tivesse dinheiro sobrando, quais das situações a seguir seriam as melhores opções para gastar esse dinheiro:</p>",
-      alternativaCorreta: 3,
       recompensa: 100,
       explicacao: `<p>O dinheiro é o nosso mais forte aliado. Com ele, podemos sair com os amigos, comprar comida e roupas lindas de astronauta...
         O dinheiro pode comprar experiências incríveis. Mas para isso acontecer, precisamos saber usar ele da melhor forma possível.  </p>
@@ -27,7 +26,6 @@ export async function seed(knex: Knex): Promise<void> {
       id: 2,
       descricao:
         "<p>Se você tivesse dinheiro sobrando, quais das situações a seguir seriam as melhores opções para gastar esse dinheiro:</p>",
-      alternativaCorreta: 3,
       recompensa: 100,
       explicacao: `<p>O dinheiro é o nosso mais forte aliado. Com ele, podemos sair com os amigos, comprar comida e roupas lindas de astronauta...
     O dinheiro pode comprar experiências incríveis. Mas para isso acontecer, precisamos saber usar ele da melhor forma possível.  </p>
@@ -43,7 +41,6 @@ export async function seed(knex: Knex): Promise<void> {
       id: 3,
       descricao:
         "<p>Se você tivesse dinheiro sobrando, quais das situações a seguir seriam as melhores opções para gastar esse dinheiro:</p>",
-      alternativaCorreta: 3,
       recompensa: 100,
       explicacao: `<p>O dinheiro é o nosso mais forte aliado. Com ele, podemos sair com os amigos, comprar comida e roupas lindas de astronauta...
     O dinheiro pode comprar experiências incríveis. Mas para isso acontecer, precisamos saber usar ele da melhor forma possível.  </p>

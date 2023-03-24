@@ -6,13 +6,7 @@ dotenv.config();
 export const development: Knex.Config = {
   client: 'pg',
   searchPath: ['knex', 'public'],
-  connection: {
-    database: 'tcc',
-    user: 'postgres',
-    password: 'postgres',
-    host: 'localhost',
-    port: 5432
-  },
+  connection: process.env.DB_CONNECTION,
   migrations: {
     directory: path.resolve(__dirname, "..", "migrations"),
   },
