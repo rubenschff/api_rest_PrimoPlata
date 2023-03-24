@@ -1,7 +1,7 @@
 
-export interface RespostaDTO {
+export interface IRespostaDTO {
     id?: number,
-    userId: number,
-    perguntaId: number,
-    alternativaId: number,
+    idUsuario: number,
+    idPergunta: number,
+    idAlternativa: number,
 }
