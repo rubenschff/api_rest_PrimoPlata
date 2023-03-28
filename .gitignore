@@ -12,3 +12,5 @@
 *.lock
 
 .vscode/
+
+/src/server/database/knex/enviroments.ts
