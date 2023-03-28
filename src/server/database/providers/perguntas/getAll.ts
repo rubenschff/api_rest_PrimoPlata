@@ -1,34 +1,27 @@
 import  { Knex} from "../../knex";
 import {ETableNames} from "../../ETableNames";
 import { IPerguntasDTO } from "../../models";
+import {RespostaProvider} from "../resposta";
+import {AlternativaProvider} from "../alternativa";
 
-export const getAll = async (page: number, limit: number, filter: string, id: number ): Promise<IPerguntasDTO[]|Error> =>{
+export const getAll = async (page: number, limit: number, filter: string, userId: number ): Promise<IPerguntasDTO[]|Error> =>{
 
     try {
 
         let result = await Knex(ETableNames.perguntas)
         .select("id","descricao","alternativaCorreta","recompensa","explicacao")
-        .where('id','=', Number(id))
         .orWhere('descricao', 'like', `%${filter}%`)
         .offset((page -1) * limit,)
         .limit(limit);
 
 
         for (let i = 0; i < result.length; i++) {
-            const alternativas = await Knex(ETableNames.alternativas).select("id", "descricao", "explicacao").where('perguntaId', '=', result[i]['id']);
-            result[i]["alternativas"] = alternativas
+
+            result[i]["respostas"] = await RespostaProvider.getRespostas(userId,result[i]['id'])
+            result[i]["alternativas"] = await AlternativaProvider.getAlternativas(result[i]['id'])
+
         }
         
-
-        if(id>0 && result.every(item => item.id !== id)){
-            const resultByID = await Knex(ETableNames.usuario)
-            .select('*')
-            .where('id', '=', id)
-            .first();
-
-            if (resultByID) return [...result, resultByID]; 
-        }
-
         return result;
 
     } catch (error) {
