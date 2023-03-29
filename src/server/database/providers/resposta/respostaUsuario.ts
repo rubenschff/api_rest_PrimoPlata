@@ -1,5 +1,5 @@
 import {Knex} from "../../knex";
-import {ETableNames, PerguntaRespostaTable} from "../../ETableNames";
+import {ETableNames} from "../../ETableNames";
 
 
 export const getRespostas = async (usuario: number, pergunta:number ) => {

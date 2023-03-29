@@ -16,9 +16,8 @@ router.get("/", (req, res) => {
   return res.send("Ola, Dev");
 });
 
-router.get("/usuario",autenticateRoutes,UsuariosController.getAllValidation,UsuariosController.getAll);
 // @ts-ignore
-router.get("/usuario/:id",UsuariosController.getByIdValidation,UsuariosController.getById);
+router.get("/usuario",autenticateRoutes,UsuariosController.getByIdValidation,UsuariosController.getById);
 // @ts-ignore
 router.put("/usuario/:id",autenticateRoutes,UsuariosController.updateByIdValidation,UsuariosController.updateById);
 // @ts-ignore
