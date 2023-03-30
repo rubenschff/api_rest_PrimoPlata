@@ -5,7 +5,7 @@ import { validation } from "../../shared/middleware";
 import {IUsuario} from "../../database/models";
 import {UsuarioProvider} from "../../database/providers/usuario";
 
-interface IBodyProps extends Omit<IUsuario, 'id'|'accessToken'> {
+interface IBodyProps extends Omit<IUsuario, 'id'> {
   name: string;
   nickName: string;
   password: string;

@@ -1,27 +1,20 @@
 import {IUsuario} from "../../models";
 import  { Knex} from "../../knex";
-import {ETableNames, UsuarioTable} from "../../ETableNames";
+import {ETableNames} from "../../ETableNames";
 import { passwordCrypto } from "../../../shared/services";
 import {JWTservice} from "../../../shared/services/JWTservice";
-import {map} from 'rxjs/operators'
+import * as http from "http";
 
 
-export const create = async (usuario: Omit<IUsuario, 'id'|'accessToken'>): Promise<IUsuario| Error> => {
+export const create = async (usuario: Omit<IUsuario, 'id'>): Promise<object| Error> => {
     try {
         const hashedPassword = await passwordCrypto.hashPassword(usuario.password!);
-        const result = await Knex(ETableNames.usuario)
-            .insert({...usuario, password: hashedPassword})
-            .returning<IUsuario>([
-                UsuarioTable.id,
-                UsuarioTable.name,
-                UsuarioTable.nickName,
-                UsuarioTable.password
-            ]);
+        const [result] = await Knex(ETableNames.usuario).insert({...usuario, password: hashedPassword}).returning('id');
 
-        console.log(result)
+
         if(typeof result === 'object') {
-            result['accessToken'] = await JWTservice.sign({uid: result.id})
-            return result
+            const accessToken = JWTservice.sign({uid: result.id})
+            return {id:result.id,accessToken: accessToken};
         }
 
         return Error('Erro ao inserir registro');
