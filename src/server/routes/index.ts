@@ -27,7 +27,7 @@ router.post(RoutesEnum.entrar, UsuariosController.loginValidation,UsuariosContro
 // @ts-ignore
 router.get(RoutesEnum.usuario,autenticateRoutes,UsuariosController.getByIdValidation,UsuariosController.getById);
 // @ts-ignore
-router.put(RoutesEnum.usuario+"/:id",autenticateRoutes,UsuariosController.updateByIdValidation,UsuariosController.updateById); //todo ajustar pra fazer alteração com SESSION_ID do cookie
+router.put(RoutesEnum.usuario,autenticateRoutes,UsuariosController.updateByIdValidation,UsuariosController.updateById);
 // @ts-ignore
 router.delete(RoutesEnum.usuario+"/:id",autenticateRoutes,UsuariosController.deleteByIdValidation,UsuariosController.deleteById); //todo ajustar pra fazer alteração com SESSION_ID do cookie
 

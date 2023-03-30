@@ -2,18 +2,17 @@ import { Request, RequestHandler, Response, query, request } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as yup from "yup";
 import { validation } from "../../shared/middleware";
-import {IUsuario} from "../../database/models";
+import {CookieDto, IUsuario} from "../../database/models";
 import { UsuarioProvider } from "../../database/providers/usuario";
+import {JWTservice} from "../../shared/services/JWTservice";
 
-interface IParamProperties {
-  id : number;
-}
+interface IHeaderProperties extends CookieDto{ }
 
 interface IBodyPropeties extends Omit<IUsuario, 'id' | 'dateOfBirth'>{ }
 
 export const updateByIdValidation = validation((getSchema) => ({
-  params: getSchema<IParamProperties>(yup.object().shape({
-    id: yup.number().integer().required().moreThan(0),
+  header: getSchema<IHeaderProperties>(yup.object().shape({
+    authorization: yup.string().required(),
   })),
   body: getSchema<IBodyPropeties>(yup.object().shape({
     name: yup.string().notRequired().min(3).max(150),
@@ -23,26 +22,33 @@ export const updateByIdValidation = validation((getSchema) => ({
 }));
 
 //cria o usuário
-export const updateById = async (req: Request<IParamProperties,{},IBodyPropeties>, res: Response) => {
+export const updateById = async (req: Request<IHeaderProperties,{},IBodyPropeties>, res: Response) => {
 
-    if (!req.params.id){
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        default:{
-          error: 'O campo "id" precisa ser informado na URL'
-        }  
-      })
+    if (!req.headers.authorization){
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            default:{
+                error: 'O token precisa ser informado no header'
+            }
+        })
     }
 
-    const update = await UsuarioProvider.updateById(req.params.id,req.body);
+    const auth = JWTservice.verify(req.headers.authorization!)
 
-   if(update instanceof Error){
-      console.log(update);
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        default:{
-          error: update.message
+    if (typeof auth === 'object'){
+        const update = await UsuarioProvider.updateById(auth.uid,req.body);
+
+        if(update instanceof Error){
+            console.log(update);
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                default:{
+                    error: update.message
+                }
+            });
         }
-      });
+        return res.status(StatusCodes.OK).json(update);
     }
 
-   return res.status(StatusCodes.NO_CONTENT).json({default: 'Usuário atualizado'})
+    return res.status(StatusCodes.BAD_REQUEST).json(auth)
+
+
 };
