@@ -4,10 +4,9 @@ import * as yup from "yup";
 import {autenticateRoutes, validation} from "../../shared/middleware";
 import { UsuarioProvider } from "../../database/providers/usuario";
 import {JWTservice} from "../../shared/services/JWTservice";
+import {CookieDto} from "../../database/models";
 
-interface IParamProperties {
-  authorization : string;
-}
+interface IParamProperties extends CookieDto{ }
 
 export const getByIdValidation = validation((getSchema) => ({
   header: getSchema<IParamProperties>(yup.object().shape({
@@ -15,7 +14,7 @@ export const getByIdValidation = validation((getSchema) => ({
   })),
 }));
 
-//cria o usuário
+
 export const getById = async (req: Request<IParamProperties>, res: Response) => {
 
   if (!req.headers.authorization){
@@ -29,16 +28,16 @@ export const getById = async (req: Request<IParamProperties>, res: Response) => 
   const auth = JWTservice.verify(req.headers.authorization!)
 
   if (typeof auth === 'object'){
-    const getUser = await UsuarioProvider.getById(auth.uid);
-    console.log(getUser);
-    if(getUser instanceof Error){
+    const usuario = await UsuarioProvider.getById(auth.uid);
+    console.log(usuario);
+    if(usuario instanceof Error){
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         default:{
-          error: getUser.message
+          error: usuario.message
         }
       });
     }
-    return res.status(StatusCodes.OK).json(getUser);
+    return res.status(StatusCodes.OK).json(usuario);
   }
 
   return res.status(StatusCodes.UNAUTHORIZED).json(auth)

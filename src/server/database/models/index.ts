@@ -5,3 +5,4 @@ export * from './AlternativasDTO';
 export * from './accessLogs';
 export * from './comparativo/ComparativoDTO';
 export * from './resposta.dto';
+export * from './cookie.dto'
