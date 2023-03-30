@@ -6,4 +6,5 @@ export interface IUsuario {
     nickName?: string;
     password?: string;
     dateOfBirth?: Date;
+    accessToken?: string
 }

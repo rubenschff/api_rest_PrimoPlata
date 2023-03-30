@@ -5,9 +5,7 @@ import { validation } from "../../shared/middleware";
 import {IUsuario} from "../../database/models";
 import {UsuarioProvider} from "../../database/providers/usuario";
 
-interface IParamProperties extends Omit<IUsuario, 'name'|'nickName'|'password'|'dateOfBirth'> {
-  id : number
-}
+interface IParamProperties extends Omit<IUsuario, 'name'|'nickName'|'password'|'dateOfBirth'|'accessToken'> { }
 
 export const deleteByIdValidation = validation((getSchema) => ({
   params: getSchema<IParamProperties>(yup.object().shape({

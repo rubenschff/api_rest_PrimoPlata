@@ -9,7 +9,7 @@ import { JWTservice } from "../../shared/services/JWTservice";
 import {LogsProvider} from "../../database/providers/logs";
 
 
-interface IBodyProps extends Omit<IUsuario, 'id'|'name'|'dateOfBirth'> {  }
+interface IBodyProps extends Omit<IUsuario, 'id'|'name'|'dateOfBirth'|'accessToken'> {  }
 
 export const loginValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
