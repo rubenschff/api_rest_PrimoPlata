@@ -1,11 +1,11 @@
 import { Knex } from 'knex';
-import { ETableNames } from '../ETableNames';
+import {ETableNames, PerguntasTable} from '../ETableNames';
 
 
 export async function up(knex: Knex) {
     return knex.schema.table(ETableNames.perguntas,
         table => {
-            table.integer('alternativaCorreta').unsigned().references('id').inTable(ETableNames.alternativas).onDelete('SET NULL').defaultTo(null);
+            table.integer(PerguntasTable.alternativaCorreta).unsigned().references('id').inTable(ETableNames.alternativas).onDelete('SET NULL').defaultTo(null);
         }).then(()=> {
         console.log(`# Alter table ${ETableNames.perguntas}`);
     });
@@ -14,8 +14,8 @@ export async function up(knex: Knex) {
 
 export async function down(knex: Knex) {
     return knex.schema.alterTable(ETableNames.perguntas,table =>{
-        table.dropColumn('alternativaCorreta')
+        table.dropColumn(PerguntasTable.alternativaCorreta)
     }).then(()=>{
-        console.log(`# Dropped table ${ETableNames.perguntas}`)
+        console.log(`# Dropped column ${PerguntasTable.alternativaCorreta} on table ${ETableNames.perguntas}`)
     });
 }

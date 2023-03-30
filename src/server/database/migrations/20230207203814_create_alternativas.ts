@@ -1,14 +1,16 @@
 import { Knex } from 'knex';
-import { ETableNames } from '../ETableNames';
+import {AlternativasTable, ETableNames} from '../ETableNames';
 
 
 export async function up(knex: Knex) {
     return knex.schema.createTable(ETableNames.alternativas,
         table => {
-            table.bigIncrements('id').primary().index();
-            table.text('descricao').index().notNullable();
-            table.text('explicacao').index().notNullable();
-            table.integer('perguntaId').references('perguntas.id').notNullable().onDelete('CASCADE')
+            table.bigIncrements(AlternativasTable.id).primary().index();
+            table.text(AlternativasTable.descricao).index().notNullable();
+            table.text(AlternativasTable.explicacao).index().notNullable();
+            table.integer(AlternativasTable.perguntaId)
+                .references(AlternativasTable.perguntaReferencePK)
+                .notNullable().onDelete('CASCADE')
             table.timestamps(true, true,true);
         }).then(()=> {
         console.log(`# Created table ${ETableNames.alternativas}`);

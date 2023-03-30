@@ -1,15 +1,15 @@
 import { Knex } from 'knex';
-import { ETableNames } from '../ETableNames';
+import {ETableNames, UsuarioTable} from '../ETableNames';
 
 
 export async function up(knex: Knex) {
     return knex.schema.createTable(ETableNames.usuario,
         table => {
-            table.bigIncrements('id').primary().index();
-            table.string('name', 150).checkLength('<=', 150).index().notNullable();
-            table.string('nickName', 150).index().notNullable().unique();
-            table.string('password').index().notNullable();
-            table.date('dateOfBirth').index().notNullable();
+            table.bigIncrements(UsuarioTable.id).primary().index();
+            table.string(UsuarioTable.name, 150).checkLength('<=', 150).index().notNullable();
+            table.string(UsuarioTable.nickName, 150).index().notNullable().unique();
+            table.string(UsuarioTable.password).index().notNullable();
+            table.date(UsuarioTable.dateOfBirth).index().notNullable();
             table.timestamps(true, true,true);
         }).then(()=> {
         console.log(`# Created table ${ETableNames.usuario}`);

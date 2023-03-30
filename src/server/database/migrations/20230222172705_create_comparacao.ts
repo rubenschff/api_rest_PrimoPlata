@@ -1,15 +1,17 @@
 import { Knex } from 'knex';
-import { ETableNames } from '../ETableNames';
+import {ComparacaoTable, ETableNames} from '../ETableNames';
 
 
 export async function up(knex: Knex) {
     return knex.schema.createTable(ETableNames.comparacao,
         table => {
-            table.bigIncrements('id').primary().index();
-            table.float('moedasRecebidas',2).index().notNullable().defaultTo(0);
-            table.float('moedasTotais',2).index().notNullable().defaultTo(0);
-            table.float('moedasDisponiveis',2).index().notNullable().defaultTo(0);
-            table.integer('usuarioId').references(ETableNames.usuario+'.id').notNullable().unique().onDelete('CASCADE');
+            table.bigIncrements(ComparacaoTable.id).primary().index();
+            table.float(ComparacaoTable.moedasRecebidas,2).index().notNullable().defaultTo(0);
+            table.float(ComparacaoTable.moedasTotais,2).index().notNullable().defaultTo(0);
+            table.float(ComparacaoTable.moedasDisponiveis,2).index().notNullable().defaultTo(0);
+            table.integer(ComparacaoTable.usuarioId)
+                .references(ComparacaoTable.usuarioReferencePK)
+                .notNullable().unique().onDelete('CASCADE');
             table.timestamps(true, true,true);
         }).then(()=> {
         console.log(`# Created table ${ETableNames.comparacao}`);
