@@ -1,6 +1,6 @@
 import { ETableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
-import { IAlternativaDTO } from "../../models/AlternativasDTO";
+import { IAlternativaDTO } from "../../models";
 
 
 export const getAlternativas = async (idPergunta: number):Promise<IAlternativaDTO[]|Error> => {
@@ -11,7 +11,6 @@ export const getAlternativas = async (idPergunta: number):Promise<IAlternativaDT
                 .where("perguntaId", '=', idPergunta)
 
             if (typeof result === 'object'){
-                console.log(result)
                 return result
             }
 
