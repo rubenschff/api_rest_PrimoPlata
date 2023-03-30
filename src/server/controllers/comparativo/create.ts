@@ -1,7 +1,7 @@
 import * as yup from "yup"
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import {IComparativoDTO} from "../../database/models/comparativo/ComparativoDTO";
+import {IComparativoDTO} from "../../database/models";
 import {validation} from "../../shared/middleware";
 import {ComparativoProvider} from "../../database/providers/comparativo";
 

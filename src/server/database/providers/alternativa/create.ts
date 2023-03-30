@@ -1,6 +1,6 @@
 import { ETableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
-import { IAlternativaDTO } from "../../models/AlternativasDTO";
+import { IAlternativaDTO } from "../../models";
 
 export const create = async (
   alternativa: Omit<IAlternativaDTO, "id">

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IAlternativaDTO } from "../../database/models/AlternativasDTO";
+import { IAlternativaDTO } from "../../database/models";
 import { StatusCodes } from "http-status-codes";
 import { validation } from "../../shared/middleware";
 import * as yup from 'yup'

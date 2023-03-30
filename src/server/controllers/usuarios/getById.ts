@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response, query, request } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as yup from "yup";
-import {autenticateRoutes, validation} from "../../shared/middleware";
+import { validation} from "../../shared/middleware";
 import { UsuarioProvider } from "../../database/providers/usuario";
 import {JWTservice} from "../../shared/services/JWTservice";
 import {CookieDto} from "../../database/models";

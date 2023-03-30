@@ -1,4 +1,4 @@
-import {IUsuario, IinvestimentoDTO} from "../../models";
+import {IinvestimentoDTO} from "../../models";
 import  { Knex} from "../../knex";
 import {ETableNames} from "../../ETableNames";
 

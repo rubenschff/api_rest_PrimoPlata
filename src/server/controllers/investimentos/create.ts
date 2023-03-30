@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { IinvestimentoDTO } from "../../database/models";
-import { validation } from "../../shared/middleware/validation";
+import { validation } from "../../shared/middleware";
 import { Request, RequestHandler, Response, query, request } from "express";
 import * as yup from "yup";
 import { investimentoProvider } from "../../database/providers/investimento";

@@ -41,7 +41,7 @@ export const login = async (req: Request<{}, {}, IBodyProps>, res: Response) => 
           });
       } else {
             const accessToken = await JWTservice.sign({uid: usuario.id})
-            await LogsProvider.accessLog(usuario.id,accessToken)
+            await LogsProvider.accessLog({usuarioId:usuario.id , accessToken})
             return res.status(StatusCodes.OK).json({
                 ...usuario,
                 accessToken: accessToken

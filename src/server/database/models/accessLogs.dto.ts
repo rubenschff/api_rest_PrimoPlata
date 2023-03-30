@@ -1,6 +1,6 @@
 
 export interface IAccessLogs {
-    id: number;
+    id?: number;
     accessToken : string;
     usuarioId: number;
 }

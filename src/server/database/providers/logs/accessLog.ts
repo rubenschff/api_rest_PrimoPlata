@@ -3,9 +3,9 @@ import {Knex} from "../../knex";
 import {ETableNames} from "../../ETableNames";
 
 
-export const accessLog = async (usuario: number, accessToken: string): Promise<number|Error> =>{
+export const accessLog = async (log: Omit<IAccessLogs, 'id'>): Promise<number|Error> =>{
     try{
-        const [result] = await Knex(ETableNames.accessLogs).insert({'usuarioId': usuario, 'accessToken': accessToken}).returning('id');
+        const [result] = await Knex(ETableNames.accessLogs).insert(log).returning('id');
         console.log(result)
 
         if(typeof result === 'object'){

@@ -1,6 +1,6 @@
 import  { Knex} from "../../knex";
 import {ETableNames} from "../../ETableNames";
-import {IComparativoDTO} from "../../models/comparativo/ComparativoDTO";
+import {IComparativoDTO} from "../../models";
 import {ComparativoProvider} from "./index";
 
 

@@ -2,7 +2,7 @@
 import {validation} from "../../shared/middleware";
 import * as yup from "yup";
 import { Request, RequestHandler, Response, query, request } from "express";
-import {IComparativoDTO} from "../../database/models/comparativo/ComparativoDTO";
+import {IComparativoDTO} from "../../database/models";
 import {StatusCodes} from "http-status-codes";
 import { ComparativoProvider} from "../../database/providers/comparativo";
 
