@@ -8,7 +8,7 @@ import {JWTservice} from "../../shared/services/JWTservice";
 
 interface IHeaderProperties extends CookieDto{ }
 
-interface IBodyPropeties extends Omit<IUsuario, 'id' | 'dateOfBirth'>{ }
+interface IBodyPropeties extends Omit<IUsuario, 'id'|'dateOfBirth' >{ }
 
 export const updateByIdValidation = validation((getSchema) => ({
   header: getSchema<IHeaderProperties>(yup.object().shape({
@@ -17,7 +17,7 @@ export const updateByIdValidation = validation((getSchema) => ({
   body: getSchema<IBodyPropeties>(yup.object().shape({
     name: yup.string().notRequired().min(3).max(150),
     nickName: yup.string().notRequired().min(6),
-    password: yup.string().notRequired().min(4),
+    password: yup.string().notRequired().min(4)
   })),
 }));
 

@@ -20,8 +20,7 @@ export const updateById = async (
             UsuarioTable.id,
             UsuarioTable.name,
             UsuarioTable.nickName,
-            UsuarioTable.password,
-            UsuarioTable.dateOfBirth
+            UsuarioTable.password
         ]);
 
     if (typeof result === 'object'){
