@@ -56,7 +56,7 @@ router.post(RoutesEnum.comparativo, ComparativoController.createValidation, Comp
 router.get(RoutesEnum.comparativo,autenticateRoutes, ComparativoController.getByUserIdValidation, ComparativoController.getByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie
 
 //-------------------------------------------------Respostas-------------------------------------------------
-router.post(RoutesEnum.resposta, RespostasController.createValidation, RespostasController.create);
+router.post(RoutesEnum.resposta,autenticateRoutes, RespostasController.createValidation, RespostasController.create);
 
 export { router };
  

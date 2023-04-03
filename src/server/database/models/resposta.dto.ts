@@ -1,6 +1,6 @@
 
 export interface IRespostaDTO {
-    id?: number,
+    id: number,
     idUsuario: number,
     idPergunta: number,
     idAlternativa: number,
