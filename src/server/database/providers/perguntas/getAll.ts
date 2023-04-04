@@ -5,6 +5,11 @@ import {RespostaProvider} from "../resposta";
 import {AlternativaProvider} from "../alternativa";
 import {PerguntaProvider} from "./index";
 
+enum addData {
+    respostas = 'respostas',
+    situacao = 'situacao',
+    alternativas = 'alternativas'
+}
 export const getAll = async (page: number, limit: number, filter: string, userId: number ): Promise<IPerguntasDTO[]|Error> =>{
 
     try {
@@ -20,13 +25,15 @@ export const getAll = async (page: number, limit: number, filter: string, userId
         .limit(limit);
 
 
-        for (let i = 0; i < result.length; i++) {
-            result[i]["respostas"] = await RespostaProvider.getRespostas(userId,result[i]['id'])
+        for (let i in result) {
+            result[i][addData.respostas] = await RespostaProvider
+                .getRespostas(userId,result[i][PerguntasTable.id])
 
-            result[i]["situacao"] = await PerguntaProvider
+            result[i][addData.situacao] = await PerguntaProvider
                 .situacao(result[i].alternativaCorreta, result[i].respostas)
 
-            result[i]["alternativas"] = await AlternativaProvider.getAlternativas(result[i]['id'])
+            result[i][addData.alternativas] = await AlternativaProvider
+                .getAlternativas(result[i][PerguntasTable.id])
 
         }
         
