@@ -5,4 +5,4 @@ export interface IPerguntasDTO {
     alternativaCorreta: number;
     recompensa: number;
     explicacao: string;
-};
+}

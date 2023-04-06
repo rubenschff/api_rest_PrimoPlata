@@ -1,24 +1,39 @@
 import  { Knex} from "../../knex";
-import {ETableNames} from "../../ETableNames";
+import {ETableNames, PerguntasTable} from "../../ETableNames";
 import { IPerguntasDTO } from "../../models";
 import {RespostaProvider} from "../resposta";
 import {AlternativaProvider} from "../alternativa";
+import {PerguntaProvider} from "./index";
 
+enum addData {
+    respostas = 'respostas',
+    situacao = 'situacao',
+    alternativas = 'alternativas'
+}
 export const getAll = async (page: number, limit: number, filter: string, userId: number ): Promise<IPerguntasDTO[]|Error> =>{
 
     try {
 
         let result = await Knex(ETableNames.perguntas)
-        .select("id","descricao","alternativaCorreta","recompensa","explicacao")
-        .orWhere('descricao', 'like', `%${filter}%`)
+        .select(PerguntasTable.id,
+            PerguntasTable.descricao,
+            PerguntasTable.alternativaCorreta,
+            PerguntasTable.recompensa,
+            PerguntasTable.explicacao)
+        .orWhere(PerguntasTable.descricao, 'like', `%${filter}%`)
         .offset((page -1) * limit,)
         .limit(limit);
 
 
-        for (let i = 0; i < result.length; i++) {
+        for (let i in result) {
+            result[i][addData.respostas] = await RespostaProvider
+                .getRespostas(userId,result[i][PerguntasTable.id])
 
-            result[i]["respostas"] = await RespostaProvider.getRespostas(userId,result[i]['id'])
-            result[i]["alternativas"] = await AlternativaProvider.getAlternativas(result[i]['id'])
+            result[i][addData.situacao] = await PerguntaProvider
+                .situacao(result[i].alternativaCorreta, result[i].respostas)
+
+            result[i][addData.alternativas] = await AlternativaProvider
+                .getAlternativas(result[i][PerguntasTable.id])
 
         }
         

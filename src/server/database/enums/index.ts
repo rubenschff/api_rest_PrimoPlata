@@ -1,0 +1,1 @@
+export * from "./situacao_pergunta.enum";
