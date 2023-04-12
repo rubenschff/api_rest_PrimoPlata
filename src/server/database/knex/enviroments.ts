@@ -7,11 +7,11 @@ export const development: Knex.Config = {
   client: 'pg',
   searchPath: ['knex', 'public'],
   connection: {
-      host : 'localhost',
-      port: 5432,
-      database: 'tcc',
-      user: 'postgres',
-      password: 'rchff0202'
+      host : process.env.HOST,
+      port: parseInt(process.env.PORT_DATABASE!),
+      database: process.env.DATABASE,
+      user: process.env.USER,
+      password: process.env.PASSWORD
   },
   migrations: {
     directory: path.resolve(__dirname, "..", "migrations"),
@@ -27,6 +27,19 @@ export const teste: Knex.Config = {
 };
 
 export const production: Knex.Config = {
-    ...development,
-    
+    client: 'pg',
+    searchPath: ['knex', 'public'],
+    connection: {
+        host : process.env.HOST,
+        port: parseInt(process.env.PORT_DATABASE!),
+        database: process.env.DATABASE,
+        user: process.env.USER,
+        password: process.env.PASSWORD
+    },
+    migrations: {
+        directory: path.resolve(__dirname, "..", "migrations"),
+    },
+    seeds: {
+        directory: path.resolve(__dirname, "..", "seeds"),
+    },
 };
