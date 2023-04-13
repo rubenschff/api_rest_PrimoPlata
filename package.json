@@ -9,7 +9,7 @@
   "scripts": {
     "start": "ts-node-dev ./src/index.ts",
     "postinstall": "tsc",
-    "production": "node ./build/index.js",
+    "production": "yarn knex:migrate && yarn knex:seed && node ./build/index.js",
     "migrate:make": "knex --knexfile ./src/server/database/knex/enviroments.ts migrate:make",
     "knex:migrate": "knex --knexfile ./src/server/database/knex/enviroments.ts migrate:latest",
     "knex:rollback": "knex --knexfile ./src/server/database/knex/enviroments.ts migrate:rollback",
