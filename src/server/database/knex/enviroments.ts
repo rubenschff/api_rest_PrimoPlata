@@ -7,7 +7,7 @@ export const development: Knex.Config = {
   client: 'pg',
   searchPath: ['knex', 'public'],
   connection: {
-      connectionString: process.env.DATABASE_URL
+      connectionString: process.env.DATABASE_URL,
   },
   migrations: {
     directory: path.resolve(__dirname, "..", "migrations"),
@@ -26,7 +26,8 @@ export const production: Knex.Config = {
     client: 'pg',
     searchPath: ['knex', 'public'],
     connection: {
-        connectionString: process.env.DATABASE_URL
+        connectionString: process.env.DATABASE_URL,
+        ssl:true
     },
     migrations: {
         directory: path.resolve(__dirname, "..", "migrations"),
