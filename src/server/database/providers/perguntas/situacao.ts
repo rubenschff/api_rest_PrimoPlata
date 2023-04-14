@@ -5,7 +5,7 @@ import {SituacaoPergunta} from "../../enums";
 export const situacao = (alternativaCorreta:number, respostas:IRespostaDTO[]) => {
         try {
 
-            let alternativas = []
+            let alternativas:Array<number> = []
             for (let i in respostas) {
                 alternativas.push(respostas[i].idAlternativa)
             }
