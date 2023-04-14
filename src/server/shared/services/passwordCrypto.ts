@@ -1,4 +1,4 @@
-import { compare, genSalt, hash } from "bcryptjs";
+import { compare, genSalt, hash } from 'bcryptjs';
 
 
 const SALT_RAMDOM = 8;
