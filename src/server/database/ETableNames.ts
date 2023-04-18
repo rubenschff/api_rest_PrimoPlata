@@ -5,7 +5,9 @@ export enum ETableNames{
     alternativas = 'alternativas',
     accessLogs = 'accessLogs',
     comparacao = 'comparacao',
-    pergunta_resposta= 'pergunta_resposta'
+    pergunta_resposta= 'pergunta_resposta',
+    investimento_fixo= 'investimento_fixo',
+    investimento_variavel = 'investimento_variavel'
 }
 
 export enum UsuarioTable {
@@ -22,7 +24,27 @@ export enum InvestimentoTable {
     risco = 'risco',
     juro = 'juro',
     liquidez = 'liquidez',
-    imagem = 'imagem'
+    imagem = 'imagem',
+    explicacao = 'explicacao'
+}
+
+export enum InvestimentoFixoTable {
+    id = 'id',
+    investimentoId = 'investimentoId',
+    juro = 'juro',
+    aporteInicial = 'aporteInicial',
+    diaParaCreditar = 'diaParaCreditar',
+    investimentoReferencePK = 'investimento.id'
+}
+
+export enum InvestimentoVariavelTable {
+    id = 'id',
+    investimentoId = 'investimentoId',
+    preco = 'preco',
+    dividendo = 'dividendo',
+    diaParaAtualizar = 'diaParaAtualizar',
+    manutencao = 'manutencao',
+    investimentoReferencePK = 'investimento.id'
 }
 
 export enum PerguntasTable {
