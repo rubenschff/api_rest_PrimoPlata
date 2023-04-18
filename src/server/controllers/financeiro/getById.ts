@@ -3,7 +3,7 @@ import * as yup from "yup";
 import {Request, Response} from "express";
 import {StatusCodes} from "http-status-codes";
 import {UsuarioProvider} from "../../database/providers/usuario";
-import {ComparativoProvider} from "../../database/providers/comparativo";
+import {ComparativoProvider} from "../../database/providers/financeiro";
 import {CookieDto} from "../../database/models";
 import {JWTservice} from "../../shared/services/JWTservice";
 

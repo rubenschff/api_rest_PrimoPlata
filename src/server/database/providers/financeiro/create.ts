@@ -1,18 +1,18 @@
 import  { Knex} from "../../knex";
 import {ETableNames} from "../../ETableNames";
-import {IComparativoDTO} from "../../models";
+import {IFinanceiroDTO} from "../../models";
 import {ComparativoProvider} from "./index";
 
 
-export const create = async (comparativo: Omit<IComparativoDTO, 'id'>): Promise<number| Error> => {
-    console.log(comparativo)
+export const create = async (financeiro: Omit<IFinanceiroDTO, 'id'>): Promise<number| Error> => {
+    console.log(financeiro)
     try {
-        const update = await verifyUser(comparativo);
+        const update = await verifyUser(financeiro);
         if(typeof update === 'number'){
             return update;
         }
 
-        const [result] = await Knex(ETableNames.comparacao).insert(comparativo).returning('id');
+        const [result] = await Knex(ETableNames.financeiro).insert(financeiro).returning('id');
 
         if(typeof result === 'object'){
             return result.id;
@@ -25,17 +25,17 @@ export const create = async (comparativo: Omit<IComparativoDTO, 'id'>): Promise<
     }
 };
 
-const verifyUser = async (comparativo: Omit<IComparativoDTO, 'id'>):Promise<number|Error>=>{
+const verifyUser = async (financeiro: Omit<IFinanceiroDTO, 'id'>):Promise<number|Error>=>{
     try {
-        const verify = await Knex(ETableNames.comparacao).select().where('usuarioId','=',comparativo.usuarioId)
+        const verify = await Knex(ETableNames.financeiro).select().where('usuarioId','=',financeiro.usuarioId)
         console.log(verify)
         if (!verify) {
-            const {usuarioId: _, ...newObj} = comparativo;
-            const update = await ComparativoProvider.updateByUserId(comparativo.usuarioId, newObj)
+            const {usuarioId: _, ...newObj} = financeiro;
+            const update = await ComparativoProvider.updateByUserId(financeiro.usuarioId, newObj)
             if (update instanceof Error) {
                 return Error('Não foi possivel atualizar');
             }
-            return comparativo.usuarioId;
+            return financeiro.usuarioId;
         }
         return Error('Não foi possivel atualizar');
     }catch (e){

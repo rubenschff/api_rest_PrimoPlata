@@ -1,18 +1,18 @@
 import * as yup from "yup"
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import {IComparativoDTO} from "../../database/models";
+import {IFinanceiroDTO} from "../../database/models";
 import {validation} from "../../shared/middleware";
-import {ComparativoProvider} from "../../database/providers/comparativo";
+import {ComparativoProvider} from "../../database/providers/financeiro";
 
 
-interface IBodyProps extends Omit<IComparativoDTO, 'id' > { }
+interface IBodyProps extends Omit<IFinanceiroDTO, 'id' > { }
 
 export const createValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
-        moedasDisponiveis: yup.number().notRequired().default(0),
-        moedasRecebidas: yup.number().notRequired().default(0),
-        moedasTotais: yup.number().notRequired().default(0),
+        arrecadado: yup.number().notRequired().default(0),
+        acumulado: yup.number().notRequired().default(0),
+        disponivel: yup.number().notRequired().default(0),
         usuarioId: yup.number().integer().required().moreThan(0),
 
     })),

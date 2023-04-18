@@ -4,7 +4,7 @@ export enum RoutesEnum {
     investimento = '/investimento',
     perguntas = '/perguntas',
     alternativa = '/alternativa',
-    comparativo = '/comparativo',
+    financeiro = '/financeiro',
     resposta = '/resposta',
     cadastrar = '/cadastrar',
     entrar = '/entrar'

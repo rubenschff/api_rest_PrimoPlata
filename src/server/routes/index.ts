@@ -6,7 +6,6 @@ import {
   AlternativaController,
   ComparativoController
 } from "../controllers";
-import { StatusCodes } from "http-status-codes";
 import { autenticateRoutes } from "../shared/middleware";
 import {RespostasController} from "../controllers/respostas";
 import {RoutesEnum} from "./routes.enum";
@@ -50,10 +49,10 @@ router.post(RoutesEnum.alternativa, AlternativaController.createValidation, Alte
 
 //-------------------------------------------------Comparativo-------------------------------------------------
 // @ts-ignore
-router.put(RoutesEnum.comparativo+"/:id", ComparativoController.updateByIdValidation, ComparativoController.updateByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie
-router.post(RoutesEnum.comparativo, ComparativoController.createValidation, ComparativoController.create);
+router.put(RoutesEnum.financeiro+"/:id", ComparativoController.updateByIdValidation, ComparativoController.updateByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie
+router.post(RoutesEnum.financeiro, ComparativoController.createValidation, ComparativoController.create);
 // @ts-ignore
-router.get(RoutesEnum.comparativo,autenticateRoutes, ComparativoController.getByUserIdValidation, ComparativoController.getByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie
+router.get(RoutesEnum.financeiro,autenticateRoutes, ComparativoController.getByUserIdValidation, ComparativoController.getByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie
 
 //-------------------------------------------------Respostas-------------------------------------------------
 router.post(RoutesEnum.resposta,autenticateRoutes, RespostasController.createValidation, RespostasController.create);

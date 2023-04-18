@@ -2,23 +2,23 @@
 import {validation} from "../../shared/middleware";
 import * as yup from "yup";
 import { Request, RequestHandler, Response, query, request } from "express";
-import {IComparativoDTO} from "../../database/models";
+import {IFinanceiroDTO} from "../../database/models";
 import {StatusCodes} from "http-status-codes";
-import { ComparativoProvider} from "../../database/providers/comparativo";
+import { ComparativoProvider} from "../../database/providers/financeiro";
 
 interface IParamProperties {
     id : number;
 }
-interface IBodyPropeties extends Omit<IComparativoDTO, 'id'|'usuarioId'>{ }
+interface IBodyPropeties extends Omit<IFinanceiroDTO, 'id'|'usuarioId'>{ }
 
 export const updateByIdValidation = validation((getSchema) => ({
     params: getSchema<IParamProperties>(yup.object().shape({
         id: yup.number().integer().required().moreThan(0),
     })),
     body: getSchema<IBodyPropeties>(yup.object().shape({
-        moedasDisponiveis: yup.number().notRequired().moreThan(0),
-        moedasRecebidas: yup.number().notRequired().moreThan(0),
-        moedasTotais: yup.number().notRequired().moreThan(0),
+        arrecadado: yup.number().notRequired().moreThan(0),
+        acumulado: yup.number().notRequired().moreThan(0),
+        disponivel: yup.number().notRequired().moreThan(0),
     })),
 }));
 export const updateByUserId = async (req: Request<IParamProperties,{},IBodyPropeties>,res:Response) => {
