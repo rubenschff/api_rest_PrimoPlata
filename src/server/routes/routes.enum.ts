@@ -7,5 +7,6 @@ export enum RoutesEnum {
     financeiro = '/financeiro',
     resposta = '/resposta',
     cadastrar = '/cadastrar',
-    entrar = '/entrar'
+    entrar = '/entrar',
+    totalizador = '/totalizador'
 }

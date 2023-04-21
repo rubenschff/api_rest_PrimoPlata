@@ -9,6 +9,7 @@ import {
 import { autenticateRoutes } from "../shared/middleware";
 import {RespostasController} from "../controllers/respostas";
 import {RoutesEnum} from "./routes.enum";
+import {TotalizadorController} from "../controllers/totalizador";
 
 const router = Router();
 
@@ -56,6 +57,11 @@ router.get(RoutesEnum.financeiro,autenticateRoutes, ComparativoController.getByU
 
 //-------------------------------------------------Respostas-------------------------------------------------
 router.post(RoutesEnum.resposta,autenticateRoutes, RespostasController.createValidation, RespostasController.create);
+
+//-------------------------------------------------Totalizador-------------------------------------------------
+// @ts-ignore
+router.get(RoutesEnum.totalizador, autenticateRoutes, TotalizadorController.getByIdValidation, TotalizadorController.getByUserId)
+
 
 export { router };
  
