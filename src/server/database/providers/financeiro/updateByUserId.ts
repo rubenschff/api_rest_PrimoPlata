@@ -1,14 +1,19 @@
 import {IFinanceiroDTO} from "../../models";
 import { Knex } from "../../knex";
-import {ETableNames} from "../../ETableNames";
+import {ETableNames, FinanceiroTable} from "../../ETableNames";
 
 
-export const updateByUserId = async (id: number,financeiro: Omit<IFinanceiroDTO, 'id'|'usuarioId'>): Promise<void|Error> => {
+export const updateByUserId = async (id: number,financeiro: Omit<IFinanceiroDTO, 'id'|'usuarioId'>): Promise<IFinanceiroDTO|Error> => {
     try {
-        const update = await Knex(ETableNames.investimento).update(financeiro).where('usuarioId','=',id);
+        const update = await Knex(ETableNames.financeiro).update(financeiro).where('usuarioId',id)
+            .returning<IFinanceiroDTO>([
+                FinanceiroTable.arrecadado,
+                FinanceiroTable.disponivel,
+                FinanceiroTable.acumulado
+            ]);
 
-        if (update > 0) {
-            return}
+        if (typeof update === 'object') {
+            return update}
 
         return Error('Não foi possível atualizar o financeiro!');
     }catch (e) {

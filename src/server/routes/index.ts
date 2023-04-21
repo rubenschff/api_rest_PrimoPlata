@@ -49,7 +49,7 @@ router.post(RoutesEnum.alternativa, AlternativaController.createValidation, Alte
 
 //-------------------------------------------------Comparativo-------------------------------------------------
 // @ts-ignore
-router.put(RoutesEnum.financeiro+"/:id", ComparativoController.updateByIdValidation, ComparativoController.updateByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie
+router.put(RoutesEnum.financeiro, ComparativoController.updateByIdValidation, ComparativoController.updateByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie
 router.post(RoutesEnum.financeiro, ComparativoController.createValidation, ComparativoController.create);
 // @ts-ignore
 router.get(RoutesEnum.financeiro,autenticateRoutes, ComparativoController.getByUserIdValidation, ComparativoController.getByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie

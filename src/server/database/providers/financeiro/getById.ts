@@ -7,11 +7,9 @@ export const getByUserId = async (userId: number): Promise< IFinanceiroDTO[] | E
         try {
             const result:IFinanceiroDTO[] = await Knex(ETableNames.financeiro)
                 .select(
-                    FinanceiroTable.id,
                     FinanceiroTable.arrecadado,
                     FinanceiroTable.acumulado,
                     FinanceiroTable.disponivel,
-                    FinanceiroTable.usuarioId
                 )
                 .where('usuarioId',userId);
 
