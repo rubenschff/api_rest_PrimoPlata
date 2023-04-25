@@ -11,7 +11,9 @@ export enum ETableNames{
     transacao = 'transacao',
     transacao_fixa = 'transacao_fixa',
     transacao_variavel = 'transacao_variavel',
-    transacao_totalizador = 'transacao_totalizador\n'
+    transacao_totalizador = 'transacao_totalizador',
+    transacao_usuario = 'transacao_usuario'
+    
 }
 
 export enum UsuarioTable {
@@ -125,4 +127,15 @@ export enum TransacaoTotalizadorTable{
     quantidadeCotas = 'quantidadeCotas',
     investimentoReferencePK = 'investimento.id',
     usuarioReferencePK = 'usuario.id'
+}
+
+export enum TransacaoUsuarioTable {
+    usuarioId = 'usuarioId',
+    investimentoId = 'investimentoId',
+    transacaoId = 'transacaoId',
+    usuarioReferencePK = 'usuario.id',
+    investimentoReferencePK = 'investimento.id',
+    transacaoReferencePK = 'transacao.id'
+
+
 }
