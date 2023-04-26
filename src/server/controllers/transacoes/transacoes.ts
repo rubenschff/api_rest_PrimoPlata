@@ -6,6 +6,7 @@ import {StatusCodes} from "http-status-codes";
 import {InvestimentoFixoProvider} from "../../database/providers/investimento_compra_venda";
 import {TipoTransacao} from "../../database/enums";
 import {Compra} from "./compra";
+import {ComparativoProvider} from "../../database/providers/financeiro";
 
 
 interface IBodyProps extends Omit<InvestirDto, 'id' > { }
@@ -27,8 +28,23 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
 
     const investimento: Omit<InvestirDto, 'id'> = req.body
 
+    const financeiro = await ComparativoProvider.getByUserId(req.body.usuarioId)
+
+    if (financeiro instanceof Error){
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            default:{
+                error: financeiro.message
+            }
+        })
+    }
+
     if (TipoTransacao.COMPRA == investimento.tipo){
-        const compra = await Compra(investimento)
+
+        if ((financeiro.disponivel! < investimento.valorTransacao!)||(financeiro.disponivel! < investimento.valorCota!)){
+            return res.status(StatusCodes.BAD_REQUEST).json({erro:'Saldo indisponível para compra!'})
+        }
+
+        const compra = await Compra(investimento,financeiro)
 
         if (compra instanceof Error){
             return res.status(StatusCodes.BAD_REQUEST).json({

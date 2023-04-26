@@ -2,11 +2,13 @@ import {InvestirDto} from "../../models/investir.dto";
 import {Knex} from "../../knex";
 import {ETableNames, TransacaoFixaTable, TransacaoTable} from "../../ETableNames";
 import * as wasi from "wasi";
+import {ComparativoProvider} from "../financeiro";
+import {IFinanceiroDTO} from "../../models";
 
 interface TransacaoFixa extends Omit<InvestirDto, 'valorCota'|'quantidadeCotas'|'id'>{
 
 }
-export const compra = async (transacao:TransacaoFixa) => {
+export const compra = async (transacao:TransacaoFixa,financeiro:Omit<IFinanceiroDTO, 'id'>) => {
         try {
             //insert de transação
             const transacaoId = await Knex(ETableNames.transacao)
@@ -56,6 +58,14 @@ export const compra = async (transacao:TransacaoFixa) => {
             if (transacaoUsuario instanceof Error){
                 return Error(transacaoUsuario.message)
             }
+
+            const saldoDisponivel:number = financeiro.disponivel! - transacao.valorTransacao!
+
+            await ComparativoProvider
+                .updateByUserId(transacao.usuarioId, {...financeiro, disponivel: saldoDisponivel} )
+                .catch(e => {
+                    return Error(e.message)
+                })
 
             return transacaoId
 
