@@ -1,7 +1,7 @@
 import  { Knex} from "../../knex";
 import {ETableNames} from "../../ETableNames";
 import {IFinanceiroDTO} from "../../models";
-import {ComparativoProvider} from "./index";
+import {FinaceiroProvider} from "./index";
 
 
 export const create = async (financeiro: Omit<IFinanceiroDTO, 'id'>): Promise<number| Error> => {
@@ -31,7 +31,7 @@ const verifyUser = async (financeiro: Omit<IFinanceiroDTO, 'id'>):Promise<number
         console.log(verify)
         if (!verify) {
             const {usuarioId: _, ...newObj} = financeiro;
-            const update = await ComparativoProvider.updateByUserId(financeiro.usuarioId, newObj)
+            const update = await FinaceiroProvider.updateByUserId(financeiro.usuarioId, newObj)
             if (update instanceof Error) {
                 return Error('Não foi possivel atualizar');
             }

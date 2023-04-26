@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { Request, RequestHandler, Response, query, request } from "express";
 import {IFinanceiroDTO} from "../../database/models";
 import {StatusCodes} from "http-status-codes";
-import { ComparativoProvider} from "../../database/providers/financeiro";
+import { FinaceiroProvider} from "../../database/providers/financeiro";
 import {JWTservice} from "../../shared/services/JWTservice";
 
 interface IHeaderProperties {
@@ -36,7 +36,7 @@ export const updateByUserId = async (req: Request<IHeaderProperties,{},IBodyProp
     const auth = await JWTservice.verify(req.headers.authorization)
 
     if (typeof auth === 'object'){
-        const update = await ComparativoProvider.updateByUserId(auth.uid,req.body);
+        const update = await FinaceiroProvider.updateByUserId(auth.uid,req.body);
         console.log(update);
         if(update instanceof Error){
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

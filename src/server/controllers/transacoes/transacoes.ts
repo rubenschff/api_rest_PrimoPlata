@@ -6,7 +6,7 @@ import {StatusCodes} from "http-status-codes";
 import {InvestimentoFixoProvider} from "../../database/providers/investimento_compra_venda";
 import {TipoTransacao} from "../../database/enums";
 import {Compra} from "./compra";
-import {ComparativoProvider} from "../../database/providers/financeiro";
+import {FinaceiroProvider} from "../../database/providers/financeiro";
 
 
 interface IBodyProps extends Omit<InvestirDto, 'id' > { }
@@ -28,7 +28,7 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
 
     const investimento: Omit<InvestirDto, 'id'> = req.body
 
-    const financeiro = await ComparativoProvider.getByUserId(req.body.usuarioId)
+    const financeiro = await FinaceiroProvider.getByUserId(req.body.usuarioId)
 
     if (financeiro instanceof Error){
         return res.status(StatusCodes.BAD_REQUEST).json({
