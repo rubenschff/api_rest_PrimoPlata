@@ -8,5 +8,6 @@ export enum RoutesEnum {
     resposta = '/resposta',
     cadastrar = '/cadastrar',
     entrar = '/entrar',
-    totalizador = '/totalizador'
+    totalizador = '/totalizador',
+    transacao = '/transacao'
 }

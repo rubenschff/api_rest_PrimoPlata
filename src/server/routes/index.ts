@@ -4,12 +4,13 @@ import {
   UsuariosController,
   PerguntasController,
   AlternativaController,
-  ComparativoController
+  ComparativoController,
+  TransacaoController,
+  TotalizadorController,
+  RespostasController
 } from "../controllers";
 import { autenticateRoutes } from "../shared/middleware";
-import {RespostasController} from "../controllers/respostas";
 import {RoutesEnum} from "./routes.enum";
-import {TotalizadorController} from "../controllers/totalizador";
 
 const router = Router();
 
@@ -61,6 +62,9 @@ router.post(RoutesEnum.resposta,autenticateRoutes, RespostasController.createVal
 //-------------------------------------------------Totalizador-------------------------------------------------
 // @ts-ignore
 router.get(RoutesEnum.totalizador, autenticateRoutes, TotalizadorController.getByIdValidation, TotalizadorController.getByUserId)
+
+//-------------------------------------------------Transacoes-------------------------------------------------
+router.post(RoutesEnum.transacao, TransacaoController.transacaoValidation, TransacaoController.transacao)
 
 
 export { router };
