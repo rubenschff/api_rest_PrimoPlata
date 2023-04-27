@@ -4,11 +4,12 @@ import {
   UsuariosController,
   PerguntasController,
   AlternativaController,
-  ComparativoController
+  FinanceiroController,
+  TransacaoController,
+  TotalizadorController,
+  RespostasController
 } from "../controllers";
-import { StatusCodes } from "http-status-codes";
 import { autenticateRoutes } from "../shared/middleware";
-import {RespostasController} from "../controllers/respostas";
 import {RoutesEnum} from "./routes.enum";
 
 const router = Router();
@@ -50,13 +51,21 @@ router.post(RoutesEnum.alternativa, AlternativaController.createValidation, Alte
 
 //-------------------------------------------------Comparativo-------------------------------------------------
 // @ts-ignore
-router.put(RoutesEnum.comparativo+"/:id", ComparativoController.updateByIdValidation, ComparativoController.updateByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie
-router.post(RoutesEnum.comparativo, ComparativoController.createValidation, ComparativoController.create);
+router.put(RoutesEnum.financeiro, FinanceiroController.updateByIdValidation, FinanceiroController.updateByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie
+router.post(RoutesEnum.financeiro, FinanceiroController.createValidation, FinanceiroController.create);
 // @ts-ignore
-router.get(RoutesEnum.comparativo,autenticateRoutes, ComparativoController.getByUserIdValidation, ComparativoController.getByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie
+router.get(RoutesEnum.financeiro,autenticateRoutes, FinanceiroController.getByUserIdValidation, FinanceiroController.getByUserId); //todo ajustar pra fazer alteração com SESSION_ID do cookie
 
 //-------------------------------------------------Respostas-------------------------------------------------
 router.post(RoutesEnum.resposta,autenticateRoutes, RespostasController.createValidation, RespostasController.create);
+
+//-------------------------------------------------Totalizador-------------------------------------------------
+// @ts-ignore
+router.get(RoutesEnum.totalizador, autenticateRoutes, TotalizadorController.getByIdValidation, TotalizadorController.getByUserId)
+
+//-------------------------------------------------Transacoes-------------------------------------------------
+router.post(RoutesEnum.transacao, TransacaoController.transacaoValidation, TransacaoController.transacao)
+
 
 export { router };
  

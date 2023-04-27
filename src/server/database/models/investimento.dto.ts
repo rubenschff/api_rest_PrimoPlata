@@ -6,3 +6,4 @@ export interface IinvestimentoDTO {
   liquidez: number;
   imagem: string;
 }
+
