@@ -1,6 +1,6 @@
 
 
-export interface InvestirDto {
+export interface TransacaoDTO {
     id: number,
     usuarioId: number,
     investimentoId: number,

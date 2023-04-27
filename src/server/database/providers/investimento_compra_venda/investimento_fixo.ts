@@ -1,11 +1,11 @@
-import {InvestirDto} from "../../models/investir.dto";
+import {TransacaoDTO} from "../../models/transacao.dto";
 import {Knex} from "../../knex";
 import {ETableNames, TransacaoFixaTable, TransacaoTable} from "../../ETableNames";
 import * as wasi from "wasi";
 import {FinaceiroProvider} from "../financeiro";
 import {IFinanceiroDTO} from "../../models";
 
-interface TransacaoFixa extends Omit<InvestirDto, 'valorCota'|'quantidadeCotas'|'id'>{
+interface TransacaoFixa extends Omit<TransacaoDTO, 'valorCota'|'quantidadeCotas'|'id'>{
 
 }
 export const compra = async (transacao:TransacaoFixa,financeiro:Omit<IFinanceiroDTO, 'id'>) => {
