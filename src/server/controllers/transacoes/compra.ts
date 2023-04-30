@@ -4,13 +4,13 @@ import {InvestimentoFixoProvider} from "../../database/providers/investimento_co
 import {Response} from "express";
 import {IFinanceiroDTO} from "../../database/models";
 
-export const Compra = async (investimento: Omit<TransacaoDTO, 'id'>, financeiro:Omit<IFinanceiroDTO, 'id'>) => {
+export const Compra = async (investimento: Omit<TransacaoDTO, 'id'>) => {
     if (investimento.investimentoId <= 3) {
         if(!investimento.valorTransacao){
             return Error('valorTransacao precisa ser informado para investimentos fixos!');
         }
 
-        return await InvestimentoFixoProvider.compra(investimento,financeiro)
+        return await InvestimentoFixoProvider.compra_fixos(investimento)
 
     }else {
         if (!investimento.quantidadeCotas || !investimento.valorCota) {
