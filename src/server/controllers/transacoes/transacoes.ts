@@ -1,15 +1,15 @@
 import {validation} from "../../shared/middleware";
 import * as yup from "yup";
-import {InvestirDto} from "../../database/models/investir.dto";
+import {TransacaoDTO} from "../../database/models/transacao.dto";
 import {Request,Response} from "express";
 import {StatusCodes} from "http-status-codes";
 import {InvestimentoFixoProvider} from "../../database/providers/investimento_compra_venda";
 import {TipoTransacao} from "../../database/enums";
-import {Compra} from "./compra";
 import {FinaceiroProvider} from "../../database/providers/financeiro";
+import {TransacaoController} from "./index";
 
 
-interface IBodyProps extends Omit<InvestirDto, 'id' > { }
+interface IBodyProps extends Omit<TransacaoDTO, 'id' > { }
 
 export const transacaoValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
@@ -26,7 +26,7 @@ export const transacaoValidation = validation((getSchema) => ({
 
 export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => {
 
-    const investimento: Omit<InvestirDto, 'id'> = req.body
+    const investimento: Omit<TransacaoDTO, 'id'> = req.body
 
     const financeiro = await FinaceiroProvider.getByUserId(req.body.usuarioId)
 
@@ -38,13 +38,15 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
         })
     }
 
+    //valida tipo de transação
     if (TipoTransacao.COMPRA == investimento.tipo){
 
+        //valida se há saldo disponível pra compra
         if ((financeiro.disponivel! < investimento.valorTransacao!)||(financeiro.disponivel! < investimento.valorCota!)){
             return res.status(StatusCodes.BAD_REQUEST).json({erro:'Saldo indisponível para compra!'})
         }
 
-        const compra = await Compra(investimento,financeiro)
+        const compra = await TransacaoController.Compra(investimento)
 
         if (compra instanceof Error){
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -54,14 +56,27 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
             })
         }
 
-        return res.status(StatusCodes.CREATED).json(compra);
+        return res.status(StatusCodes.CREATED).json({result: `Compra ${compra[0].id} registrada`});
 
     }else if (TipoTransacao.VENDA == investimento.tipo){
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            default:{
-                error: 'Venda não implementada'
-            }
-        })
+
+        //valida se há saldo disponível pra venda
+        if ((financeiro.disponivel! < investimento.valorTransacao!)||(financeiro.disponivel! < investimento.valorCota!)){
+            return res.status(StatusCodes.BAD_REQUEST).json({erro:'Saldo indisponível para compra!'})
+        }
+
+        const venda = await TransacaoController.venda(investimento)
+
+        if (venda instanceof Error){
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                default:{
+                    error: venda.message
+                }
+            })
+        }
+
+        return res.status(StatusCodes.CREATED).json({result: `Venda ${venda[0].id} registrada`});
+
     }else {
         return res.status(StatusCodes.BAD_REQUEST).json({
             default:{
