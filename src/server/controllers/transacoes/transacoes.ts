@@ -7,6 +7,7 @@ import {InvestimentoFixoProvider} from "../../database/providers/investimento_co
 import {TipoTransacao} from "../../database/enums";
 import {FinaceiroProvider} from "../../database/providers/financeiro";
 import {TransacaoController} from "./index";
+import {TotalizadorProvider} from "../../database/providers/totalizador";
 
 
 interface IBodyProps extends Omit<TransacaoDTO, 'id' > { }
@@ -55,6 +56,11 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
                 }
             })
         }
+
+        await TotalizadorProvider.create({
+            usuarioId: investimento.usuarioId,
+            investimentoId: investimento.investimentoId
+        })
 
         return res.status(StatusCodes.CREATED).json({result: `Compra ${compra[0].id} registrada`});
 

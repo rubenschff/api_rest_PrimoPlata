@@ -11,6 +11,7 @@ interface IHeaderProperties extends CookieDto{ }
 
 interface IBodyPropeties extends Omit<IUsuario, 'id'|'dateOfBirth' >{
     oldPassword?: string;
+    dateOfBirth?: Date
 }
 
 export const updateByIdValidation = validation((getSchema) => ({
@@ -21,7 +22,8 @@ export const updateByIdValidation = validation((getSchema) => ({
     name: yup.string().notRequired().min(3).max(150),
     nickName: yup.string().notRequired().min(6),
     password: yup.string().notRequired().min(4),
-      oldPassword: yup.string().required().min(4)
+      dateOfBirth: yup.date().notRequired(),
+      oldPassword: yup.string().notRequired().min(4)
   })),
 }));
 
@@ -40,26 +42,35 @@ export const updateById = async (req: Request<IHeaderProperties,{},IBodyPropetie
 
     if (typeof auth === 'object'){
 
-        const oldUser = await UsuarioProvider.getById(auth.uid)
+        if(req.body.password || req.body.oldPassword){
+            if (!req.body.oldPassword){
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+                    .json({error: 'Informe a senha antiga no campo oldPassword'})
+            } else if (!req.body.password){
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+                    .json({error: 'Informe a senha no campo password'})
+            }
 
-        if (oldUser instanceof Error){
-           return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                default:{
-                    error: oldUser.message
-                }
-            });
+            const oldUser = await UsuarioProvider.getById(auth.uid)
+
+            if (oldUser instanceof Error){
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    default:{
+                        error: oldUser.message
+                    }
+                });
+            }
+
+            const oldPassword = await passwordCrypto.verifyPassword(req.body.oldPassword!, oldUser.password!)
+
+            if (!oldPassword){
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    error: 'Senha incorreta'
+                });
+            }
+
+            delete req.body.oldPassword
         }
-
-        const oldPassword = await passwordCrypto.verifyPassword(req.body.oldPassword!, oldUser.password!)
-
-        if (!oldPassword){
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                error: 'Senha incorreta'
-            });
-        }
-
-
-        delete req.body.oldPassword
 
         const update = await UsuarioProvider.updateById(auth.uid, req.body);
 

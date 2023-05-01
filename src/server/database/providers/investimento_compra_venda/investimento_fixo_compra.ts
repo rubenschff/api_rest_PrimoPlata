@@ -21,7 +21,7 @@ export const compra_fixos = async (transacao:TransacaoFixa) => {
                 .catch(e=>{
                     return Error(e)
                 });
-            console.log(transacaoId)
+
             if (transacaoId instanceof Error){
                 return Error(transacaoId.message)
             }
@@ -38,7 +38,7 @@ export const compra_fixos = async (transacao:TransacaoFixa) => {
                     return Error(e)
                 })
 
-            console.log(transacaoFixaId)
+
             if (transacaoFixaId instanceof Error){
                 return Error(transacaoFixaId.message)
             }
@@ -54,7 +54,7 @@ export const compra_fixos = async (transacao:TransacaoFixa) => {
                     return Error(e)
                 })
 
-            console.log(transacaoUsuario)
+
             if (transacaoUsuario instanceof Error){
                 return Error(transacaoUsuario.message)
             }

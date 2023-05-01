@@ -5,6 +5,6 @@ export interface ITotalizadorDto {
     usuarioId: number;
     investimentoId: number;
     valorInicial: number;
-    calorAcumulado: number;
+    valorAcumulado: number;
     quantidadeCotas: number;
 }
