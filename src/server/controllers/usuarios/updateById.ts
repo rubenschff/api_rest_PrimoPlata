@@ -38,6 +38,12 @@ export const updateById = async (req: Request<IHeaderProperties,{},IBodyPropetie
         })
     }
 
+    if (req.body.nickName){
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            error: 'Não é permitido alterar o nickName!'
+        });
+    }
+
     const auth = JWTservice.verify(req.headers.authorization!)
 
     if (typeof auth === 'object'){
