@@ -1,7 +1,7 @@
 import {Knex} from "../../database/knex";
 import {EViewNames, ProcessarInvestimentosView} from "../../database/EViewNames";
 import {IFinanceiroDTO, IProcesarInvestimentos} from "../../database/models";
-import {FinaceiroProvider} from "../../database/providers/financeiro";
+import {FinanceiroProvider} from "../../database/providers/financeiro";
 import {TotalizadorProvider} from "../../database/providers/totalizador";
 import {ITotalizadorDto} from "../../database/models/totalizador.dto";
 import {SituacaoTransacao, TipoTransacao} from "../../database/enums";
@@ -65,7 +65,7 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
 
    for (let u in usuario) {
 
-        const financeiro:Error|IFinanceiroDTO = await FinaceiroProvider.getByUserId(usuario[u])
+        const financeiro:Error|IFinanceiroDTO = await FinanceiroProvider.getByUserId(usuario[u])
         if (financeiro instanceof Error) {
             break
         }

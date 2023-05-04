@@ -5,7 +5,7 @@ import {Request,Response} from "express";
 import {StatusCodes} from "http-status-codes";
 import {InvestimentoFixoProvider} from "../../database/providers/investimento_compra_venda";
 import {TipoTransacao} from "../../database/enums";
-import {FinaceiroProvider} from "../../database/providers/financeiro";
+import {FinanceiroProvider} from "../../database/providers/financeiro";
 import {TransacaoController} from "./index";
 import {TotalizadorProvider} from "../../database/providers/totalizador";
 
@@ -29,7 +29,7 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
 
     const investimento: Omit<TransacaoDTO, 'id'> = req.body
 
-    const financeiro = await FinaceiroProvider.getByUserId(req.body.usuarioId)
+    const financeiro = await FinanceiroProvider.getByUserId(req.body.usuarioId)
 
     if (financeiro instanceof Error){
         return res.status(StatusCodes.BAD_REQUEST).json({

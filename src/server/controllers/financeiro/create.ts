@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import {IFinanceiroDTO} from "../../database/models";
 import {validation} from "../../shared/middleware";
-import {FinaceiroProvider} from "../../database/providers/financeiro";
+import {FinanceiroProvider} from "../../database/providers/financeiro";
 
 
 interface IBodyProps extends Omit<IFinanceiroDTO, 'id' > { }
@@ -19,7 +19,7 @@ export const createValidation = validation((getSchema) => ({
 }));
 
 export const create = async (req: Request<{},{},IBodyProps>, res: Response) =>{
-    const result = await FinaceiroProvider.create(req.body)
+    const result = await FinanceiroProvider.create(req.body)
 
     if (result instanceof Error){
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
