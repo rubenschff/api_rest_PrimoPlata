@@ -7,7 +7,14 @@ export const getById = async (usuario:number):Promise<ITotalizadorDto[]|Error> =
 
     try {
             const totalizadorUsuario = await Knex(ETableNames.transacao_totalizador)
-                .select<ITotalizadorDto[]>('*')
+                .select<ITotalizadorDto[]>([
+                    TransacaoTotalizadorTable.id,
+                    TransacaoTotalizadorTable.usuarioId,
+                    TransacaoTotalizadorTable.investimentoId,
+                    TransacaoTotalizadorTable.valorInicial,
+                    TransacaoTotalizadorTable.valorAcumulado,
+                    TransacaoTotalizadorTable.quantidadeCotas
+                ])
                 .from(ETableNames.transacao_totalizador)
                 .where(TransacaoTotalizadorTable.usuarioId,usuario)
 

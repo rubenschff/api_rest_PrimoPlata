@@ -11,6 +11,7 @@ import {
 } from "../controllers";
 import { autenticateRoutes } from "../shared/middleware";
 import {RoutesEnum} from "./routes.enum";
+import {ProcessarInvestimentosController} from "../controllers/processar_investimentos";
 
 const router = Router();
 
@@ -66,6 +67,8 @@ router.get(RoutesEnum.totalizador, autenticateRoutes, TotalizadorController.getB
 //-------------------------------------------------Transacoes-------------------------------------------------
 router.post(RoutesEnum.transacao, TransacaoController.transacaoValidation, TransacaoController.transacao)
 
+//-------------------------------------------------Processar Transações-------------------------------------------------
+router.post(RoutesEnum.processar, ProcessarInvestimentosController.processAll)
 
 export { router };
  

@@ -9,5 +9,6 @@ export enum RoutesEnum {
     cadastrar = '/cadastrar',
     entrar = '/entrar',
     totalizador = '/totalizador',
-    transacao = '/transacao'
+    transacao = '/transacao',
+    processar = '/processar'
 }

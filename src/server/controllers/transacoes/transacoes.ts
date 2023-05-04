@@ -18,7 +18,7 @@ export const transacaoValidation = validation((getSchema) => ({
         investimentoId: yup.number().integer().required(),
         situacao: yup.number().integer().required().oneOf([1,2,3,4]),
         tipo: yup.number().integer().required().oneOf([1,2,3]),
-        valorTransacao: yup.number().integer().notRequired(),
+        valorTransacao: yup.number().notRequired(),
         valorCota: yup.number().integer().notRequired(),
         quantidadeCotas: yup.number().integer().notRequired()
     })),
@@ -80,6 +80,11 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
                 }
             })
         }
+
+        await TotalizadorProvider.create({
+            usuarioId: investimento.usuarioId,
+            investimentoId: investimento.investimentoId
+        })
 
         return res.status(StatusCodes.CREATED).json({result: `Venda ${venda[0].id} registrada`});
 
