@@ -6,14 +6,19 @@ export const getAll = async (page: number, limit: number, filter: string, id: nu
     try {
 
         const result = await Knex(ETableNames.investimento)
+            .join('investimento_fixo','investimento_fixo.investimentoId','=','investimento.id')
         .select(
-            InvestimentoTable.id,
-            InvestimentoTable.descricao,
-            InvestimentoTable.explicacao,
-            InvestimentoTable.risco,
-            InvestimentoTable.liquidez,
-            InvestimentoTable.imagem)
-        .where(InvestimentoTable.id, Number(id))
+            "investimento.id",
+            "investimento.descricao",
+            "investimento.explicacao",
+            "investimento.risco",
+            "investimento.liquidez",
+            "investimento.imagem",
+            "investimento_fixo.juro",
+            "investimento_fixo.aporteInicial",
+            "investimento_fixo.diaParaCreditar"
+        )
+        .where("investimento.id", Number(id))
         .orWhere(InvestimentoTable.descricao, 'like', `%${filter}%`)
         .offset((page -1) * limit,)
         .limit(limit);
