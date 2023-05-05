@@ -7,4 +7,5 @@ export interface IProcesarInvestimentos {
     tipo: number;
     situacao: number;
     valor: number;
+    log?: object
 }

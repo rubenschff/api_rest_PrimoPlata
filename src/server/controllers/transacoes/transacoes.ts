@@ -3,7 +3,6 @@ import * as yup from "yup";
 import {TransacaoDTO} from "../../database/models/transacao.dto";
 import {Request,Response} from "express";
 import {StatusCodes} from "http-status-codes";
-import {InvestimentoFixoProvider} from "../../database/providers/investimento_compra_venda";
 import {TipoTransacao} from "../../database/enums";
 import {FinanceiroProvider} from "../../database/providers/financeiro";
 import {TransacaoController} from "./index";
@@ -29,18 +28,18 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
 
     const investimento: Omit<TransacaoDTO, 'id'> = req.body
 
-    const financeiro = await FinanceiroProvider.getByUserId(req.body.usuarioId)
-
-    if (financeiro instanceof Error){
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            default:{
-                error: financeiro.message
-            }
-        })
-    }
-
     //valida tipo de transação
     if (TipoTransacao.COMPRA == investimento.tipo){
+
+        const financeiro = await FinanceiroProvider.getByUserId(req.body.usuarioId)
+
+        if (financeiro instanceof Error){
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                default:{
+                    error: financeiro.message
+                }
+            })
+        }
 
         //valida se há saldo disponível pra compra
         if ((financeiro.disponivel! < investimento.valorTransacao!)||(financeiro.disponivel! < investimento.valorCota!)){
@@ -66,9 +65,21 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
 
     }else if (TipoTransacao.VENDA == investimento.tipo){
 
+
+        const totalizador = await TotalizadorProvider.create({
+            usuarioId: investimento.usuarioId,
+            investimentoId: investimento.investimentoId
+        })
+
+        if (totalizador instanceof Error) {
+            return res.status(StatusCodes.BAD_REQUEST).json({erro:'Não foi possivel recuperar o totalizador para comparação'})
+        }
+
+
+
         //valida se há saldo disponível pra venda
-        if ((financeiro.disponivel! < investimento.valorTransacao!)||(financeiro.disponivel! < investimento.valorCota!)){
-            return res.status(StatusCodes.BAD_REQUEST).json({erro:'Saldo indisponível para compra!'})
+        if ((totalizador.valorAcumulado < investimento.valorTransacao!)||(totalizador.valorAcumulado < investimento.valorCota!)){
+            return res.status(StatusCodes.BAD_REQUEST).json({erro:'Saldo indisponível para venda!'})
         }
 
         const venda = await TransacaoController.venda(investimento)
@@ -80,11 +91,6 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
                 }
             })
         }
-
-        await TotalizadorProvider.create({
-            usuarioId: investimento.usuarioId,
-            investimentoId: investimento.investimentoId
-        })
 
         return res.status(StatusCodes.CREATED).json({result: `Venda ${venda[0].id} registrada`});
 

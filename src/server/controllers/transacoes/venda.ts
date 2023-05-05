@@ -1,6 +1,5 @@
 import {TransacaoDTO} from "../../database/models/transacao.dto";
-import {InvestimentoController} from "../investimentos";
-import {InvestimentoFixoProvider} from "../../database/providers/investimento_compra_venda";
+import {TransacaoFixoProvider} from "../../database/providers/investimento_compra_venda";
 
 
 export const venda = async (transacao: Omit<TransacaoDTO, 'id'>) => {
@@ -10,7 +9,7 @@ export const venda = async (transacao: Omit<TransacaoDTO, 'id'>) => {
             return Error('valorTransacao precisa ser informado para investimentos fixos!');
         }
 
-       return await InvestimentoFixoProvider.venda_fixos(transacao)
+       return await TransacaoFixoProvider.venda_fixos(transacao)
 
     }else {
         if (!transacao.quantidadeCotas || !transacao.valorCota) {

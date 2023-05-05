@@ -98,6 +98,7 @@ export enum TransacaoTable{
     investimentoId = 'investimentoId',
     tipo = 'tipo',
     situacao = 'situacao',
+    log = 'log',
     usuarioReferencePK = 'usuario.id',
     investimentoReferencePK = 'investimento.id'
 }

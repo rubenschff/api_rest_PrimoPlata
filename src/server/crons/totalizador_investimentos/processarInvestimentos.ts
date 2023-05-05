@@ -5,10 +5,9 @@ import {FinanceiroProvider} from "../../database/providers/financeiro";
 import {TotalizadorProvider} from "../../database/providers/totalizador";
 import {ITotalizadorDto} from "../../database/models/totalizador.dto";
 import {SituacaoTransacao, TipoTransacao} from "../../database/enums";
+import {TransacaoFixoProvider} from "../../database/providers/investimento_compra_venda";
 
-interface Processados extends IProcesarInvestimentos{
-    log?: object
-}
+interface Processados extends IProcesarInvestimentos{ }
 export const processarInvestimentos = async ():Promise<object|Error> => {
 
    try {
@@ -43,8 +42,7 @@ export const processarInvestimentos = async ():Promise<object|Error> => {
 
           const processados:Processados[] = await UsuariosParaProcessar(usuarios,paraProcessar)
 
-           if (processados){
-               console.log(processados)
+           if (processados.length > 0){
                return processados
            }
 
@@ -111,20 +109,23 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
                switch (investimento.tipo) {
                    case TipoTransacao.COMPRA:{
 
-                       if (financeiro.disponivel! > investimento.valor){
-                           financeiro.disponivel! -= investimento.valor;
+                       if (financeiro.disponivel! >= investimento.valor){
                            totalizador1!.valorInicial =  totalizador1!.valorInicial + investimento.valor;
                            totalizador1!.valorAcumulado =  totalizador1!.valorAcumulado + investimento.valor;
                            processados.push({
                                ...investimento,
-                               situacao: SituacaoTransacao.CONCLUIDO
+                               situacao: SituacaoTransacao.CONCLUIDO,
+                               log:{
+                                   status:`CONCLUIDO, saldo disponível R$${financeiro.disponivel} valor da compra R$${investimento.valor}`
+                               }
                            })
+                           financeiro.disponivel! -= investimento.valor;
                        }else {
                            processados.push({
                                ...investimento,
                                situacao: SituacaoTransacao.CANCELADO,
                                log:{
-                                   erro:`CANCELADO, saldo disponível R$${financeiro.disponivel} valor da compra R$${investimento.valor}`
+                                   status:`CANCELADO, saldo disponível R$${financeiro.disponivel} valor da compra R$${investimento.valor}`
                                }
                            })
                        }
@@ -132,25 +133,29 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
                        break
                    }default:{
 
-                       if(totalizador1!.valorAcumulado > investimento.valor){
+                       if(totalizador1!.valorAcumulado >= investimento.valor){
                            const aux = totalizador1!.valorAcumulado - investimento.valor
-                           totalizador1!.valorAcumulado = totalizador1!.valorAcumulado - investimento.valor
 
                            if (aux < totalizador1!.valorInicial){
-                               totalizador1!.valorInicial = totalizador1!.valorAcumulado
+                               totalizador1!.valorInicial = aux
                            }
 
                            financeiro.disponivel! += investimento.valor
+
                            processados.push({
                                ...investimento,
-                               situacao: SituacaoTransacao.CONCLUIDO
+                               situacao: SituacaoTransacao.CONCLUIDO,
+                               log:{
+                                   status:`CONCLUIDO, saldo acumulado R$${totalizador1!.valorAcumulado} valor da venda R$${investimento.valor}`
+                               }
                            })
+                           totalizador1!.valorAcumulado -= investimento.valor
                        }else {
                            processados.push({
                                ...investimento,
                                situacao: SituacaoTransacao.CANCELADO,
                                log:{
-                                   erro:`CANCELADO, saldo acumulado R$${totalizador1!.valorAcumulado} valor da venda R$${investimento.valor}`
+                                   status:`CANCELADO, saldo acumulado R$${totalizador1!.valorAcumulado} valor da venda R$${investimento.valor}`
                                }
                            })
                        }
@@ -163,20 +168,24 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
                switch (investimento.tipo) {
                    case TipoTransacao.COMPRA:{
 
-                       if (financeiro.disponivel! > investimento.valor){
-                           financeiro.disponivel! -= investimento.valor;
+                       if (financeiro.disponivel! >= investimento.valor){
+
                            totalizador2!.valorInicial =  totalizador2!.valorInicial + investimento.valor;
                            totalizador2!.valorAcumulado =  totalizador2!.valorAcumulado + investimento.valor;
                            processados.push({
                                ...investimento,
-                               situacao: SituacaoTransacao.CONCLUIDO
+                               situacao: SituacaoTransacao.CONCLUIDO,
+                               log:{
+                                   status:`CONCLUIDO, saldo disponível R$${financeiro.disponivel} valor da compra R$${investimento.valor}`
+                               }
                            })
+                           financeiro.disponivel! -= investimento.valor;
                        }else {
                            processados.push({
                                ...investimento,
                                situacao: SituacaoTransacao.CANCELADO,
                                log:{
-                                   erro:`CANCELADO, saldo disponível R$${financeiro.disponivel} valor da compra R$${investimento.valor}`
+                                   status:`CANCELADO, saldo disponível R$${financeiro.disponivel} valor da compra R$${investimento.valor}`
                                }
                            })
                        }
@@ -184,25 +193,28 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
                        break
                    }default:{
 
-                       if(totalizador2!.valorAcumulado > investimento.valor){
+                       if(totalizador2!.valorAcumulado >= investimento.valor){
                            const aux = totalizador2!.valorAcumulado - investimento.valor
-                           totalizador2!.valorAcumulado = totalizador2!.valorAcumulado - investimento.valor
 
                            if (aux < totalizador2!.valorInicial){
-                               totalizador2!.valorInicial = totalizador2!.valorAcumulado
+                               totalizador2!.valorInicial = aux
                            }
 
                            financeiro.disponivel! += investimento.valor
                            processados.push({
                                ...investimento,
-                               situacao: SituacaoTransacao.CONCLUIDO
+                               situacao: SituacaoTransacao.CONCLUIDO,
+                               log:{
+                                   status:`CONCLUIDO, saldo acumulado R$${totalizador2!.valorAcumulado} valor da venda R$${investimento.valor}`
+                               }
                            })
+                           totalizador2!.valorAcumulado -= investimento.valor
                        }else {
                            processados.push({
                                ...investimento,
                                situacao: SituacaoTransacao.CANCELADO,
                                log:{
-                                   erro:`CANCELADO, saldo acumulado R$${totalizador2!.valorAcumulado} valor da venda R$${investimento.valor}`
+                                   status:`CANCELADO, saldo acumulado R$${totalizador2!.valorAcumulado} valor da venda R$${investimento.valor}`
                                }
                            })
                        }
@@ -215,20 +227,23 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
                switch (investimento.tipo) {
                    case TipoTransacao.COMPRA:{
 
-                       if (financeiro.disponivel! > investimento.valor){
-                           financeiro.disponivel! -= investimento.valor;
+                       if (financeiro.disponivel! >= investimento.valor){
                            totalizador3!.valorInicial =  totalizador3!.valorInicial + investimento.valor;
                            totalizador3!.valorAcumulado =  totalizador3!.valorAcumulado + investimento.valor;
                            processados.push({
                                ...investimento,
-                               situacao: SituacaoTransacao.CONCLUIDO
+                               situacao: SituacaoTransacao.CONCLUIDO,
+                               log:{
+                                   status:`CONCLUIDO, saldo disponível R$${financeiro.disponivel} valor da compra R$${investimento.valor}`
+                               }
                            })
+                           financeiro.disponivel! -= investimento.valor;
                        }else {
                            processados.push({
                                ...investimento,
                                situacao: SituacaoTransacao.CANCELADO,
                                log:{
-                                   erro:`CANCELADO, saldo disponível R$${financeiro.disponivel} valor da compra R$${investimento.valor}`
+                                   status:`CANCELADO, saldo disponível R$${financeiro.disponivel} valor da compra R$${investimento.valor}`
                                }
                            })
                        }
@@ -236,25 +251,29 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
                        break
                    }default:{
 
-                       if(totalizador3!.valorAcumulado > investimento.valor){
+                       if(totalizador3!.valorAcumulado >= investimento.valor){
                            const aux = totalizador3!.valorAcumulado - investimento.valor
-                           totalizador3!.valorAcumulado = totalizador3!.valorAcumulado - investimento.valor
 
                            if (aux < totalizador3!.valorInicial){
-                               totalizador3!.valorInicial = totalizador3!.valorAcumulado
+                               totalizador3!.valorInicial = aux
                            }
 
                            financeiro.disponivel! += investimento.valor
                            processados.push({
                                ...investimento,
-                               situacao: SituacaoTransacao.CONCLUIDO
+                               situacao: SituacaoTransacao.CONCLUIDO,
+                               log:{
+                                   status:`CONCLUIDO, saldo acumulado R$${totalizador3!.valorAcumulado} valor da venda R$${investimento.valor}`
+                               }
                            })
+
+                           totalizador3!.valorAcumulado -= investimento.valor
                        }else {
                            processados.push({
                                ...investimento,
                                situacao: SituacaoTransacao.CANCELADO,
                                log:{
-                                   erro:`CANCELADO, saldo acumulado R$${totalizador3!.valorAcumulado} valor da venda R$${investimento.valor}`
+                                   status:`CANCELADO, saldo acumulado R$${totalizador3!.valorAcumulado} valor da venda R$${investimento.valor}`
                                }
                            })
                        }
@@ -273,9 +292,36 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
        console.log(totalizador1)
        console.log(totalizador2)
        console.log(totalizador3)
+       console.log(`Processados do usuário ${usuario[u]}` )
+       processados.map(processados =>{
+           if (processados.usuarioId == usuario[u]){
+               console.log(processados)
+           }
+       })
+
+       const totalizadores:ITotalizadorDto[] = [totalizador1!,totalizador2!,totalizador3!]
+
+       //atualiza totalizadores
+       totalizadores.map( async totalizador =>{
+           if (totalizador){
+               await TotalizadorProvider.updateById(totalizador)
+               return
+           }
+       })
+
+       //atualiza financeiro
+       await FinanceiroProvider.updateByUserId(usuario[u],
+           {
+               arrecadado: Number(financeiro.arrecadado!.toFixed(2)),
+               acumulado: Number(financeiro.acumulado!.toFixed(2)),
+               disponivel: Number(financeiro.disponivel!.toFixed(2))
+           })
 
 
     }
+
+   //atualiza todas as transações processadas
+   await TransacaoFixoProvider.updateTransacao(processados)
 
    return processados
 }

@@ -18,7 +18,7 @@ export const getById = async (usuario:number):Promise<ITotalizadorDto[]|Error> =
                 .from(ETableNames.transacao_totalizador)
                 .where(TransacaoTotalizadorTable.usuarioId,usuario)
 
-            if (typeof totalizadorUsuario === 'object'){
+            if (totalizadorUsuario.length > 0){
                 return totalizadorUsuario
             }
 
