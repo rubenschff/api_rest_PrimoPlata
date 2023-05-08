@@ -3,11 +3,11 @@ import {ETableNames, RespostaTable} from "../../ETableNames";
 import {IRespostaDTO} from "../../models";
 
 
-export const getRespostas = async (usuario: number, pergunta:number ):Promise<IRespostaDTO|Error> => {
+export const getRespostas = async (usuario: number, pergunta:number ):Promise<IRespostaDTO[]|Error> => {
 
     try {
         const result = await Knex(ETableNames.pergunta_resposta)
-            .select<IRespostaDTO>(
+            .select<IRespostaDTO[]>(
                 RespostaTable.idUsuario,
                 RespostaTable.idPergunta,
                 RespostaTable.idAlternativa,

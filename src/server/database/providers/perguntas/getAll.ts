@@ -1,16 +1,21 @@
 import  { Knex} from "../../knex";
 import {ETableNames, PerguntasTable} from "../../ETableNames";
-import { IPerguntasDTO } from "../../models";
+import {IAlternativaDTO, IPerguntasDTO, IRespostaDTO} from "../../models";
 import {RespostaProvider} from "../resposta";
 import {AlternativaProvider} from "../alternativa";
 import {PerguntaProvider} from "./index";
 
+interface Perguntas_Respostas extends IPerguntasDTO {
+    respostas: IRespostaDTO,
+    situacao: number,
+    alternativas: IAlternativaDTO[]
+}
 enum addData {
     respostas = 'respostas',
     situacao = 'situacao',
     alternativas = 'alternativas'
 }
-export const getAll = async (page: number, limit: number, filter: string, userId: number ): Promise<IPerguntasDTO[]|Error> =>{
+export const getAll = async (page: number, limit: number, filter: string, userId: number ): Promise<Perguntas_Respostas[]|Error> =>{
 
     try {
 
