@@ -6,6 +6,7 @@ import {RespostaProvider} from "../../database/providers/resposta";
 import {JWTservice} from "../../shared/services/JWTservice";
 import {PerguntaProvider} from "../../database/providers/perguntas";
 import {StatusCodes} from "http-status-codes";
+import {PerguntasController} from "../perguntas";
 
 interface IBodyProps extends Omit<IRespostaDTO, 'id'|'idUsuario'> {}
 
@@ -29,6 +30,7 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) =>
     const auth = JWTservice.verify(req.headers.authorization!)
 
     if (typeof auth === 'object'){
+
         const resposta = await RespostaProvider.create({idUsuario:auth.uid,...req.body})
 
         if (resposta instanceof Error){
@@ -37,7 +39,37 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) =>
             })
         }
 
-        return res.status(StatusCodes.OK).json(`Resposta criada com o id ${resposta}`);
+        const proximapergunta = await PerguntaProvider.proximaPergunta(auth.uid)
+
+
+
+        if (proximapergunta instanceof Error){
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                error: proximapergunta.message
+            })
+        }
+
+        if (proximapergunta.length == 0){
+            return res.status(StatusCodes.BAD_GATEWAY).json({
+                error: 'Acabaram as perguntas'
+            })
+        }
+
+
+            return res.status(StatusCodes.OK).json({
+                usuarioId: auth.uid,
+                respostas: proximapergunta[0].respostas,
+                pergunta: {
+                    id: proximapergunta[0].id,
+                    descricao: proximapergunta[0].descricao,
+                    explicacao: proximapergunta[0].explicacao,
+                    alternativas: proximapergunta[0].alternativas,
+                    alternativaCorreta: proximapergunta[0].alternativaCorreta,
+                    recompensa: proximapergunta[0].recompensa
+                }
+            });
+
+
     }
 
     return res.json({

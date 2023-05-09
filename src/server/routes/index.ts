@@ -42,8 +42,7 @@ router.get(RoutesEnum.investimento, InvestimentoController.getAllValidation, Inv
 //-------------------------------------------------Perguntas-------------------------------------------------
 router.post(RoutesEnum.perguntas, PerguntasController.createValidation, PerguntasController.create);
 router.get(RoutesEnum.perguntas,autenticateRoutes, PerguntasController.getAllValidation, PerguntasController.getAll);
-// @ts-ignore
-router.get('/proxima',PerguntasController.proximaPerguntaValidation,PerguntasController.ProximaPergunta)
+
 // @ts-ignore
 router.delete(RoutesEnum.perguntas+"/:id", PerguntasController.deleteByIdValidation, PerguntasController.deleteById); //todo ajustar pra fazer alteração com SESSION_ID do cookie
 

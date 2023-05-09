@@ -6,7 +6,7 @@ import {AlternativaProvider} from "../alternativa";
 import {PerguntaProvider} from "./index";
 
 interface Perguntas_Respostas extends IPerguntasDTO {
-    respostas: IRespostaDTO,
+    respostas: IRespostaDTO[],
     situacao: number,
     alternativas: IAlternativaDTO[]
 }

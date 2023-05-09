@@ -86,6 +86,7 @@ export enum FinanceiroTable {
 }
 
 export enum RespostaTable {
+    id = 'id',
     idUsuario = 'idUsuario',
     idPergunta = 'idPergunta',
     idAlternativa = 'idAlternativa',

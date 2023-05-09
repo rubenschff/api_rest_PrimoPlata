@@ -5,11 +5,11 @@ import {PerguntaProvider} from "./index";
 import {SituacaoPergunta} from "../../enums";
 
 interface Perguntas_Respostas extends IPerguntasDTO {
-    respostas: IRespostaDTO,
+    respostas: IRespostaDTO[],
     situacao: number,
     alternativas: IAlternativaDTO[]
 }
-export const proximaPergunta = async (usuario:number):Promise<Error|IPerguntasDTO[]> => {
+export const proximaPergunta = async (usuario:number):Promise<Error|Perguntas_Respostas[]> => {
   try {
 
       const resposta = await Knex(ETableNames.pergunta_resposta)
