@@ -66,7 +66,7 @@ router.post(RoutesEnum.resposta,autenticateRoutes, RespostasController.createVal
 router.get(RoutesEnum.totalizador, autenticateRoutes, TotalizadorController.getByIdValidation, TotalizadorController.getByUserId)
 
 //-------------------------------------------------Transacoes-------------------------------------------------
-router.post(RoutesEnum.transacao, TransacaoController.transacaoValidation, TransacaoController.transacao)
+router.post(RoutesEnum.transacao,autenticateRoutes, TransacaoController.transacaoValidation, TransacaoController.transacao)
 
 //-------------------------------------------------Processar Transações-------------------------------------------------
 router.post(RoutesEnum.processar, ProcessarInvestimentosController.processAll)
