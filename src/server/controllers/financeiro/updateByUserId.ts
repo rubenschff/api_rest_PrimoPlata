@@ -1,20 +1,18 @@
 
 import {validation} from "../../shared/middleware";
 import * as yup from "yup";
-import { Request, RequestHandler, Response, query, request } from "express";
-import {IFinanceiroDTO} from "../../database/models";
+import { Request, Response } from "express";
+import {CookieDto, IFinanceiroDTO} from "../../database/models";
 import {StatusCodes} from "http-status-codes";
 import { FinanceiroProvider} from "../../database/providers/financeiro";
 import {JWTservice} from "../../shared/services/JWTservice";
 
-interface IHeaderProperties {
-    id : number;
-}
+interface IHeaderProperties extends CookieDto{ }
 interface IBodyPropeties extends Omit<IFinanceiroDTO, 'id'|'usuarioId'>{ }
 
 export const updateByIdValidation = validation((getSchema) => ({
     header: getSchema<IHeaderProperties>(yup.object().shape({
-        id: yup.number().integer().required().moreThan(0),
+        authorization: yup.string().required(),
     })),
     body: getSchema<IBodyPropeties>(yup.object().shape({
         arrecadado: yup.number().notRequired().moreThan(0),
