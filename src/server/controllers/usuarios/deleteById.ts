@@ -2,40 +2,46 @@ import { Request, RequestHandler, Response, query, request } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as yup from "yup";
 import { validation } from "../../shared/middleware";
-import {IUsuario} from "../../database/models";
+import {CookieDto} from "../../database/models";
 import {UsuarioProvider} from "../../database/providers/usuario";
+import {JWTservice} from "../../shared/services/JWTservice";
 
-interface IParamProperties extends Omit<IUsuario, 'name'|'nickName'|'password'|'dateOfBirth'> {
-  id : number
-}
+interface IHeaderProperties extends CookieDto { }
 
 export const deleteByIdValidation = validation((getSchema) => ({
-  params: getSchema<IParamProperties>(yup.object().shape({
-    id: yup.number().integer().required().moreThan(0),
+  header: getSchema<IHeaderProperties>(yup.object().shape({
+    authorization: yup.string().required(),
   })),
 }));
 
 //cria o usuário
-export const deleteById = async (req: Request<IParamProperties>, res: Response) => {
+export const deleteById = async (req: Request<IHeaderProperties>, res: Response) => {
 
-  if (!req.params.id){
+  if (!req.headers.authorization){
     return res.status(StatusCodes.BAD_REQUEST).json({
       default:{
-        error: 'O campo "id" precisa ser informado na URL'
-      }  
+        error: 'O token precisa ser informado no header'
+      }
     })
   }
 
-  const result = await UsuarioProvider.deleteById(req.params.id);
 
-  if (result instanceof Error){
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      errors:{
-        default: result.message
-      }
-    });
+  const auth = await JWTservice.verify(req.headers.authorization)
+
+  if (typeof auth === 'object'){
+
+    const result = await UsuarioProvider.deleteById(auth.uid);
+
+    if (result instanceof Error){
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        errors:{
+          default: result.message
+        }
+      });
+    }
+
+
+    return res.status(StatusCodes.NO_CONTENT).send();
   }
-
-
-  return res.status(StatusCodes.NO_CONTENT).send();
+  return res.status(StatusCodes.BAD_REQUEST).json(auth)
 };

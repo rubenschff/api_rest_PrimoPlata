@@ -16,7 +16,7 @@ import {ProcessarInvestimentosController} from "../controllers/processar_investi
 const router = Router();
 
 router.get("/", (req, res) => {
-  return res.send("Ola, Dev");
+  return res.send("Bem vindo, você acessou a API REST do projeto de TCC PrimoPlata!");
 });
 
 
@@ -31,7 +31,7 @@ router.get(RoutesEnum.usuario,autenticateRoutes,UsuariosController.getByIdValida
 // @ts-ignore
 router.put(RoutesEnum.usuario,autenticateRoutes,UsuariosController.updateByIdValidation,UsuariosController.updateById);
 // @ts-ignore
-router.delete(RoutesEnum.usuario+"/:id",autenticateRoutes,UsuariosController.deleteByIdValidation,UsuariosController.deleteById); //todo ajustar pra fazer alteração com SESSION_ID do cookie
+router.delete(RoutesEnum.usuario,autenticateRoutes,UsuariosController.deleteByIdValidation,UsuariosController.deleteById);
 
 
 //-------------------------------------------------Investimentos-------------------------------------------------
@@ -42,19 +42,20 @@ router.get(RoutesEnum.investimento, InvestimentoController.getAllValidation, Inv
 //-------------------------------------------------Perguntas-------------------------------------------------
 router.post(RoutesEnum.perguntas, PerguntasController.createValidation, PerguntasController.create);
 router.get(RoutesEnum.perguntas,autenticateRoutes, PerguntasController.getAllValidation, PerguntasController.getAll);
-
-// @ts-ignore
-router.delete(RoutesEnum.perguntas+"/:id", PerguntasController.deleteByIdValidation, PerguntasController.deleteById); //todo ajustar pra fazer alteração com SESSION_ID do cookie
+// NÃO SERÁ PERMITIDO DELETAR PERGUNTAS DE MOMENTO
+//router.delete(RoutesEnum.perguntas+"/:id", PerguntasController.deleteByIdValidation, PerguntasController.deleteById);
 
 
 //-------------------------------------------------Alternativas-------------------------------------------------
 router.post(RoutesEnum.alternativa, AlternativaController.createValidation, AlternativaController.create);
 
 
-//-------------------------------------------------Comparativo-------------------------------------------------
+//-------------------------------------------------Financeiro-------------------------------------------------
 // @ts-ignore
 router.put(RoutesEnum.financeiro,autenticateRoutes, FinanceiroController.updateByIdValidation, FinanceiroController.updateByUserId);
-router.post(RoutesEnum.financeiro, FinanceiroController.createValidation, FinanceiroController.create);
+
+//CRIADO QUANDO USUÁRIO CRIA O CADASTRO, NÃO SERÁ NECESSÁRIO DE MOMENTO
+//router.post(RoutesEnum.financeiro, FinanceiroController.createValidation, FinanceiroController.create);
 // @ts-ignore
 router.get(RoutesEnum.financeiro,autenticateRoutes, FinanceiroController.getByUserIdValidation, FinanceiroController.getByUserId);
 
