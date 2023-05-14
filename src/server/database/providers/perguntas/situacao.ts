@@ -3,9 +3,9 @@ import {SituacaoPergunta} from "../../enums";
 
 
 export const situacao = (alternativaCorreta:number, respostas:IRespostaDTO[]) => {
-        try {
 
             let alternativas:Array<number> = []
+
             for (let i in respostas) {
                 alternativas.push(respostas[i].idAlternativa)
             }
@@ -23,8 +23,4 @@ export const situacao = (alternativaCorreta:number, respostas:IRespostaDTO[]) =>
                 return SituacaoPergunta.BLOQUEADO
             }
 
-        }catch (e) {
-            console.log(e)
-            return Error("Não foi possivel definir a situação da pergunta")
-        }
 }

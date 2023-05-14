@@ -8,6 +8,7 @@ import {CookieDto} from "../../database/models";
 import {JWTservice} from "../../shared/services/JWTservice";
 
 interface IQueryProperties {
+    pergunta?: number
     page?: number;
     limit?: number;
     filter?: string;
@@ -23,6 +24,7 @@ export const getAllValidation = validation((getSchema) => ({
       page: yup.number().notRequired().moreThan(0).default(1),
       limit: yup.number().notRequired().moreThan(0).default(10),
       filter: yup.string().notRequired().default(''),
+        pergunta: yup.number().notRequired().default(0)
     })),
   }));
   
@@ -41,7 +43,7 @@ export const getAllValidation = validation((getSchema) => ({
 
       if (typeof auth === 'object'){
           const result = await PerguntaProvider
-              .getAll(req.query.page || 1, req.query.limit || 100, req.query.filter || '', auth.uid)
+              .getAll(req.query.page || 1, req.query.limit || 100, req.query.filter || '', auth.uid, req.query.pergunta || 0)
 
           return res.status(StatusCodes.OK).json(result);
       }
