@@ -10,5 +10,6 @@ export enum RoutesEnum {
     entrar = '/entrar',
     totalizador = '/totalizador',
     transacao = '/transacao',
-    processar = '/processar'
+    processar = '/processar',
+    proxima_pergunta = '/proxima_pergunta'
 }

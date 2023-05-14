@@ -15,7 +15,7 @@ import {ProcessarInvestimentosController} from "../controllers/processar_investi
 
 const router = Router();
 
-router.get("/", (req, res) => {
+router.get("/",autenticateRoutes, (req, res) => {
   return res.send("Bem vindo, você acessou a API REST do projeto de TCC PrimoPlata!");
 });
 
@@ -42,6 +42,8 @@ router.get(RoutesEnum.investimento, InvestimentoController.getAllValidation, Inv
 //-------------------------------------------------Perguntas-------------------------------------------------
 router.post(RoutesEnum.perguntas, PerguntasController.createValidation, PerguntasController.create);
 router.get(RoutesEnum.perguntas,autenticateRoutes, PerguntasController.getAllValidation, PerguntasController.getAll);
+// @ts-ignore
+router.get(RoutesEnum.proxima_pergunta, autenticateRoutes,PerguntasController.proxima_perguntaValidation, PerguntasController.proxima_pergunta)
 // NÃO SERÁ PERMITIDO DELETAR PERGUNTAS DE MOMENTO
 //router.delete(RoutesEnum.perguntas+"/:id", PerguntasController.deleteByIdValidation, PerguntasController.deleteById);
 
