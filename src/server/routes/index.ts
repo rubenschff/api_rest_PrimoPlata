@@ -36,7 +36,7 @@ router.delete(RoutesEnum.usuario,autenticateRoutes,UsuariosController.deleteById
 
 //-------------------------------------------------Investimentos-------------------------------------------------
 router.post(RoutesEnum.investimento, InvestimentoController.createValidation, InvestimentoController.create);
-router.get(RoutesEnum.investimento, InvestimentoController.getAllValidation, InvestimentoController.getAll);
+router.get(RoutesEnum.investimento,autenticateRoutes, InvestimentoController.getAllValidation, InvestimentoController.getAll);
 
 
 //-------------------------------------------------Perguntas-------------------------------------------------

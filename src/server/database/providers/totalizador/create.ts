@@ -7,7 +7,14 @@ export const create = async (totalizador: Omit<ITotalizadorDto, 'id'|'quantidade
     try {
         console.log(totalizador)
         const totalizadorExiste = await Knex(ETableNames.transacao_totalizador)
-                     .select<ITotalizadorDto[]>('*')
+                     .select<ITotalizadorDto[]>([
+                         TransacaoTotalizadorTable.id,
+                         TransacaoTotalizadorTable.usuarioId,
+                         TransacaoTotalizadorTable.investimentoId,
+                         TransacaoTotalizadorTable.valorInicial,
+                         TransacaoTotalizadorTable.valorAcumulado,
+                         TransacaoTotalizadorTable.quantidadeCotas
+                     ])
                       .where(TransacaoTotalizadorTable.usuarioId,totalizador.usuarioId)
                        .where(TransacaoTotalizadorTable.investimentoId,totalizador.investimentoId)
 
@@ -18,7 +25,13 @@ export const create = async (totalizador: Omit<ITotalizadorDto, 'id'|'quantidade
 
         const insertTotalizador = await Knex(ETableNames.transacao_totalizador)
             .insert(totalizador)
-            .returning<ITotalizadorDto[]>('*')
+            .returning<ITotalizadorDto[]>([
+                TransacaoTotalizadorTable.id,
+                TransacaoTotalizadorTable.usuarioId,
+                TransacaoTotalizadorTable.investimentoId,
+                TransacaoTotalizadorTable.valorInicial,
+                TransacaoTotalizadorTable.valorAcumulado,
+                TransacaoTotalizadorTable.quantidadeCotas])
 
         if (insertTotalizador.length > 0){
             return insertTotalizador[0]

@@ -24,7 +24,8 @@ export const proximaPergunta = async (usuario:number):Promise<Error|Perguntas_Re
           return resposta
       }
 
-      const perguntasRespostas_situacao:Error|Perguntas_Respostas[] = await PerguntaProvider.getAll(1,100,'',usuario)
+      const perguntasRespostas_situacao:Error|Perguntas_Respostas[] = await PerguntaProvider
+          .getAll(1,100,'',usuario,0)
 
       if (perguntasRespostas_situacao instanceof Error){
           return perguntasRespostas_situacao;
