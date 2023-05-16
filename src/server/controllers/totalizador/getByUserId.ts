@@ -8,12 +8,19 @@ import {TotalizadorProvider} from "../../database/providers/totalizador";
 
 interface IParamProperties extends CookieDto{ }
 
+interface IQueryProperties {
+    id? : number;
+}
+
 export const getByIdValidation = validation((getSchema) => ({
     header: getSchema<IParamProperties>(yup.object().shape({
         authorization: yup.string().required()
     })),
+    query: getSchema<IQueryProperties>(yup.object().shape({
+        id: yup.number().integer().notRequired().default(0),
+    })),
 }));
-export const getByUserId = async (req: Request<IParamProperties>, res: Response) => {
+export const getByUserId = async (req: Request<IParamProperties,{},{},IQueryProperties>, res: Response) => {
 
     if (!req.headers.authorization){
         return res.status(StatusCodes.BAD_REQUEST).json({
@@ -26,7 +33,7 @@ export const getByUserId = async (req: Request<IParamProperties>, res: Response)
     const auth = JWTservice.verify(req.headers.authorization!)
 
     if (typeof auth === 'object'){
-        const investimentosUsuario = await TotalizadorProvider.getById(auth.uid)
+        const investimentosUsuario = await TotalizadorProvider.getById(auth.uid,req.query.id || 0)
         console.log(investimentosUsuario);
         if(investimentosUsuario instanceof Error){
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

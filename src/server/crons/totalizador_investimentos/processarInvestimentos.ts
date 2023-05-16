@@ -68,7 +68,7 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
             break
         }
 
-        let totalizator = await TotalizadorProvider.getById(usuario[u])
+        let totalizator = await TotalizadorProvider.getById(usuario[u],0)
         if (totalizator instanceof Error) {
             break
         }

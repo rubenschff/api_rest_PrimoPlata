@@ -49,7 +49,7 @@ export const getAll = async (req: Request<{}, {}, {},IQueryProperties>, res: Res
     if (typeof auth ==='object'){
 
         const result:Investimentos[]|Error = await investimentoProvider.getAll(req.query.page || 1, req.query.limit || 10, req.query.filter || '', Number(req.query.id) || 0);
-
+        console.log(result)
         if(result instanceof Error){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 default:{
