@@ -81,6 +81,8 @@ export enum FinanceiroTable {
     arrecadado = 'arrecadado',
     acumulado = 'acumulado',
     disponivel = 'disponivel',
+    compras = 'compras',
+    vendas = 'vendas',
     usuarioId = 'usuarioId',
     usuarioReferencePK = 'usuario.id'
 }

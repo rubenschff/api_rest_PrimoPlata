@@ -6,6 +6,7 @@ import {TotalizadorProvider} from "../../database/providers/totalizador";
 import {ITotalizadorDto} from "../../database/models/totalizador.dto";
 import {SituacaoTransacao, TipoTransacao} from "../../database/enums";
 import {TransacaoFixoProvider} from "../../database/providers/investimento_compra_venda";
+import {investimentoProvider} from "../../database/providers/investimento";
 
 interface Processados extends IProcesarInvestimentos{ }
 export const processarInvestimentos = async ():Promise<object|Error> => {
@@ -24,21 +25,12 @@ export const processarInvestimentos = async ():Promise<object|Error> => {
 
        if (paraProcessar.length > 0) {
            let userIDs:number[] = []
-           let investimentosIDs:number[] = []
-
 
            await paraProcessar.map((investimentos) =>{
                userIDs.push(investimentos.usuarioId);
-               investimentosIDs.push(investimentos.investimentoId)
            })
 
            const usuarios = [...new Set(userIDs)]
-           const investimentos = [...new Set(investimentosIDs)]
-
-           console.log(usuarios);
-           console.log(investimentos)
-
-           console.log(paraProcessar)
 
           const processados:Processados[] = await UsuariosParaProcessar(usuarios,paraProcessar)
 
@@ -96,13 +88,6 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
             }
         })
 
-       console.log('Inicio')
-       console.log(`Usuario ${usuario[u]}`)
-       console.log(financeiro)
-       console.log('Totalizadores...')
-       console.log(totalizador1)
-       console.log(totalizador2)
-       console.log(totalizador3)
 
        investimentoPorUsuario.map( async investimento => {
            if (investimento.investimentoId == 1 && investimento.situacao == SituacaoTransacao.ABERTO){
@@ -285,37 +270,46 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
            }
        })
 
-       console.log('Final')
-       console.log(`Usuario ${usuario[u]}`)
-       console.log(financeiro)
-       console.log('Totalizadores...')
-       console.log(totalizador1)
-       console.log(totalizador2)
-       console.log(totalizador3)
-       console.log(`Processados do usuário ${usuario[u]}` )
-       processados.map(processados =>{
-           if (processados.usuarioId == usuario[u]){
-               console.log(processados)
-           }
-       })
-
        const totalizadores:ITotalizadorDto[] = [totalizador1!,totalizador2!,totalizador3!]
+
+       financeiro.acumulado = (totalizador1!.valorAcumulado == undefined ? 0 : Number(totalizador1!.valorAcumulado.toFixed(2))) +
+                              (totalizador2!.valorAcumulado == undefined ? 0 : Number(totalizador2!.valorAcumulado.toFixed(2))) +
+                              (totalizador3!.valorAcumulado == undefined ? 0 : Number(totalizador3!.valorAcumulado.toFixed(2)));
 
        //atualiza totalizadores
        totalizadores.map( async totalizador =>{
+
+           const investimento = await investimentoProvider
+               .getAll(1,10,'',totalizador.investimentoId)
+
+           if (investimento instanceof Error){
+               return investimento.message
+           }
+
+           totalizador.valorAcumulado *= 1 + (investimento[0].juro / 100)
+
+
            if (totalizador){
-               await TotalizadorProvider.updateById(totalizador)
-               return
+               await TotalizadorProvider.updateById({...totalizador,
+               valorAcumulado: totalizador!.valorAcumulado == undefined ? 0 : Number(totalizador!.valorAcumulado.toFixed(2)),
+               valorInicial: totalizador!.valorInicial == undefined ? 0 : Number(totalizador!.valorInicial.toFixed(2))
+               })
+              return
            }
        })
 
+
+
+
+
        //atualiza financeiro
-       await FinanceiroProvider.updateByUserId(usuario[u],
-           {
-               arrecadado: Number(financeiro.arrecadado!.toFixed(2)),
-               acumulado: Number(financeiro.acumulado!.toFixed(2)),
-               disponivel: Number(financeiro.disponivel!.toFixed(2))
-           })
+       await FinanceiroProvider.updateByUserId(usuario[u], {...financeiro,
+           acumulado: financeiro.acumulado == undefined ? 0 : Number(financeiro.acumulado.toFixed(2)),
+           disponivel: financeiro.disponivel == undefined ? 0 : Number(financeiro.disponivel.toFixed(2)),
+           arrecadado: financeiro.arrecadado == undefined ? 0 : Number(financeiro.arrecadado.toFixed(2)),
+           compras: 0,
+           vendas: 0
+       })
 
 
     }

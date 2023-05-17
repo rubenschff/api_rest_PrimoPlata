@@ -9,6 +9,7 @@ import {TransacaoController} from "./index";
 import {TotalizadorProvider} from "../../database/providers/totalizador";
 import {CookieDto} from "../../database/models";
 import {JWTservice} from "../../shared/services/JWTservice";
+import {FinanceiroTable} from "../../database/ETableNames";
 
 
 interface IHeaderProperties extends CookieDto{
@@ -81,10 +82,20 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
             investimentoId: investimento.investimentoId
         })
 
+        await FinanceiroProvider.updateByUserId(
+            auth.uid,
+            {...financeiro, compras: financeiro.compras! + investimento.valorTransacao!}
+        )
+
         return res.status(StatusCodes.CREATED).json({result: `Compra ${compra[0].id} registrada`});
 
     } else if (TipoTransacao.VENDA == investimento.tipo) {
 
+        const financeiro = await FinanceiroProvider.getByUserId(auth.uid)
+
+        if (financeiro instanceof Error) {
+            return res.status(StatusCodes.BAD_REQUEST).json({error: financeiro.message})
+        }
 
         const totalizador = await TotalizadorProvider.create({
             usuarioId: auth.uid,
@@ -110,6 +121,11 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
                 }
             })
         }
+
+        await FinanceiroProvider.updateByUserId(
+            auth.uid,
+            {...financeiro, vendas: financeiro.vendas! + investimento.valorTransacao!}
+        )
 
         return res.status(StatusCodes.CREATED).json({result: `Venda ${venda[0].id} registrada`});
 

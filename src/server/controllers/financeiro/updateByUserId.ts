@@ -18,6 +18,8 @@ export const updateByIdValidation = validation((getSchema) => ({
         arrecadado: yup.number().notRequired().moreThan(0),
         acumulado: yup.number().notRequired().moreThan(0),
         disponivel: yup.number().notRequired().moreThan(0),
+        compras: yup.number().notRequired().moreThan(0),
+        vendas: yup.number().notRequired().moreThan(0),
     })),
 }));
 export const updateByUserId = async (req: Request<IHeaderProperties,{},IBodyPropeties>,res:Response) => {

@@ -13,6 +13,8 @@ export const createValidation = validation((getSchema) => ({
         arrecadado: yup.number().notRequired().default(0),
         acumulado: yup.number().notRequired().default(0),
         disponivel: yup.number().notRequired().default(0),
+        compras: yup.number().notRequired().default(0),
+        vendas: yup.number().notRequired().default(0),
         usuarioId: yup.number().integer().required().moreThan(0),
 
     })),

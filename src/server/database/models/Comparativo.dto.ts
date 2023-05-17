@@ -4,5 +4,7 @@ export interface IFinanceiroDTO {
     arrecadado?: number;
     acumulado?: number;
     disponivel?: number;
+    compras?: number;
+    vendas?: number
     usuarioId: number;
 }

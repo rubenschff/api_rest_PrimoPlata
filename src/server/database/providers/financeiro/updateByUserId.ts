@@ -9,7 +9,9 @@ export const updateByUserId = async (id: number,financeiro: Omit<IFinanceiroDTO,
             .returning<IFinanceiroDTO>([
                 FinanceiroTable.arrecadado,
                 FinanceiroTable.disponivel,
-                FinanceiroTable.acumulado
+                FinanceiroTable.acumulado,
+                FinanceiroTable.compras,
+                FinanceiroTable.vendas
             ]);
 
         if (typeof update === 'object') {

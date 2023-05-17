@@ -10,6 +10,8 @@ export const getByUserId = async (userId: number): Promise< IFinanceiroDTO | Err
                     FinanceiroTable.arrecadado,
                     FinanceiroTable.acumulado,
                     FinanceiroTable.disponivel,
+                    FinanceiroTable.compras,
+                    FinanceiroTable.vendas
                 )
                 .where('usuarioId',userId);
 
