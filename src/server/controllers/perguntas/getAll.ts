@@ -6,6 +6,7 @@ import { PerguntaProvider } from '../../database/providers/perguntas';
 import {RespostaProvider} from "../../database/providers/resposta";
 import {CookieDto} from "../../database/models";
 import {JWTservice} from "../../shared/services/JWTservice";
+import {SituacaoPergunta} from "../../database/enums";
 
 interface IQueryProperties {
     pergunta?: number
@@ -44,6 +45,30 @@ export const getAllValidation = validation((getSchema) => ({
       if (typeof auth === 'object'){
           const result = await PerguntaProvider
               .getAll(req.query.page || 1, req.query.limit || 100, req.query.filter || '', auth.uid, req.query.pergunta || 0)
+
+
+          if (result instanceof Error){
+              return res.status(StatusCodes.BAD_REQUEST).json(result.message)
+          }
+
+
+          console.log(result)
+         if (result.length>0){
+
+             for (let i in result){
+                 console.log(`for i = ${i}`)
+                  if (result[i].situacao == SituacaoPergunta.EM_ABERTO){
+
+                      let aux = parseInt(i) + 1;
+                      console.log(`for aux = ${aux}`)
+                      for (aux; aux<result.length;aux++){
+                          result[aux].situacao = SituacaoPergunta.BLOQUEADO
+                      }
+
+                  }
+              }
+          }
+
 
           return res.status(StatusCodes.OK).json(result);
       }
