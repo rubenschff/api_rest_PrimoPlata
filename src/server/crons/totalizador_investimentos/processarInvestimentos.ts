@@ -272,9 +272,6 @@ const UsuariosParaProcessar = async (usuario:number[],paraProcessar:IProcesarInv
 
        const totalizadores:ITotalizadorDto[] = [totalizador1!,totalizador2!,totalizador3!]
 
-       financeiro.acumulado = (totalizador1!.valorAcumulado == undefined ? 0 : Number(totalizador1!.valorAcumulado.toFixed(2))) +
-                              (totalizador2!.valorAcumulado == undefined ? 0 : Number(totalizador2!.valorAcumulado.toFixed(2))) +
-                              (totalizador3!.valorAcumulado == undefined ? 0 : Number(totalizador3!.valorAcumulado.toFixed(2)));
 
        //atualiza totalizadores
        totalizadores.map( async totalizador =>{

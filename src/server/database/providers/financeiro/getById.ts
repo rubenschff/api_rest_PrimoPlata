@@ -1,6 +1,7 @@
 import {IFinanceiroDTO} from "../../models";
 import {Knex} from "../../knex";
 import {ETableNames, FinanceiroTable} from "../../ETableNames";
+import {TotalizadorProvider} from "../totalizador";
 
 
 export const getByUserId = async (userId: number): Promise< IFinanceiroDTO | Error > => {
@@ -15,7 +16,21 @@ export const getByUserId = async (userId: number): Promise< IFinanceiroDTO | Err
                 )
                 .where('usuarioId',userId);
 
-            if (result) return result[0];
+            const totalizadores = await TotalizadorProvider.getById(userId, 0)
+
+            if (totalizadores instanceof Error){
+                return totalizadores
+            }
+
+            let acumulado:number = 0
+
+            totalizadores.map(totalizador => {
+                acumulado += totalizador.valorAcumulado == undefined ? 0 : totalizador.valorAcumulado
+            })
+
+
+
+            if (result) return {...result[0], acumulado: acumulado};
 
             return Error("Não foi possivel recuperar os registro")
         }catch (e) {
