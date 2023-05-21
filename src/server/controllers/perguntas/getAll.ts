@@ -7,6 +7,7 @@ import {RespostaProvider} from "../../database/providers/resposta";
 import {CookieDto, IAlternativaDTO, IRespostaDTO} from "../../database/models";
 import {JWTservice} from "../../shared/services/JWTservice";
 import {SituacaoPergunta} from "../../database/enums";
+import {format_pergunta} from "../../helper/format_pergunta";
 
 interface IQueryProperties {
     pergunta?: number
@@ -65,7 +66,7 @@ export const getAllValidation = validation((getSchema) => ({
               return res.status(StatusCodes.BAD_REQUEST).json(result.message)
           }
 
-          let perguntas: PerguntaDTO[] = []
+
          if (result.length>0){
 
              for (let i in result){
@@ -80,22 +81,10 @@ export const getAllValidation = validation((getSchema) => ({
 
                   }
 
-                 perguntas.push({
-                     usuarioId: auth.uid,
-                     respostas: result[i].respostas,
-                     pergunta: {
-                         id: result[i].id,
-                         descricao: result[i].descricao,
-                         explicacao: result[i].explicacao,
-                         alternativas: result[i].alternativas,
-                         alternativaCorreta: result[i].alternativaCorreta,
-                         recompensa: result[i].recompensa,
-                         situacao: result[i].situacao
-                     }
-                 })
               }
           }
 
+          const perguntas = format_pergunta(result, auth.uid)
 
           return res.status(StatusCodes.OK).json(perguntas);
       }

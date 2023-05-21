@@ -7,16 +7,25 @@ export const getAlternativas = async (idPergunta: number):Promise<IAlternativaDT
 
 
             const result = await Knex(ETableNames.alternativas)
-                .select<IAlternativaDTO[]>(
-                    AlternativasTable.id,
-                    AlternativasTable.descricao,
-                    AlternativasTable.explicacao)
+                .select<IAlternativaDTO[]>('*')
                 .where(AlternativasTable.perguntaId, idPergunta)
 
             if (result instanceof Error){
                 console.log(result)
             }
 
-            return result
+            let alternativas: IAlternativaDTO[] = []
+
+            result.map(result => {
+                alternativas.push({
+                    id: parseInt(result.id.toString()),
+                    descricao: result.descricao,
+                    explicacao: result.explicacao,
+                    alternativa: result.alternativa,
+                    perguntaId: parseInt(result.perguntaId.toString())
+                })
+            })
+
+            return alternativas
 
 }
