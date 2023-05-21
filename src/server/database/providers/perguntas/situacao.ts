@@ -13,7 +13,13 @@ export const situacao = (alternativaCorreta:number, respostas:IRespostaDTO[]) =>
 
             if (alternativas.length == 0){
                 return SituacaoPergunta.EM_ABERTO
-            }else if(alternativas.length == 1 || alternativas.length == 2){
+            }else if(alternativas.length == 1 ){
+                if(alternativas.indexOf(alternativaCorreta) != -1){
+                    return SituacaoPergunta.ACERTOU
+                }else {
+                    return SituacaoPergunta.EM_ABERTO
+                }
+            }else if(alternativas.length == 2 ){
                 if(alternativas.indexOf(alternativaCorreta) != -1){
                     return SituacaoPergunta.ACERTOU
                 }else {
