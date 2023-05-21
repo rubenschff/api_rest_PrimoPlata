@@ -36,13 +36,6 @@ export const proxima_pergunta = async (req: Request<IParamProperties> , res: Res
             return res.status(StatusCodes.BAD_REQUEST).json({error: proxima_pergunta.message})
         }
 
-
-        if (proxima_pergunta.length == 0){
-            return res.status(StatusCodes.BAD_GATEWAY).json({
-                error: 'Acabaram as perguntas'
-            })
-        }
-
         return res.status(StatusCodes.OK).json({
             usuarioId: auth.uid,
             respostas: proxima_pergunta[0].respostas,

@@ -31,7 +31,15 @@ export const proximaPergunta = async (usuario:number):Promise<Error|Perguntas_Re
           return perguntasRespostas_situacao;
       }
 
-      return await PerguntasDisponiveis(perguntasRespostas_situacao);
+      const disponivel = await PerguntasDisponiveis(perguntasRespostas_situacao);
+
+      if (disponivel.length > 0){
+          return disponivel
+      }else {
+          return [perguntasRespostas_situacao[perguntasRespostas_situacao.length-1]]
+      }
+
+
 
   }catch (e:any) {
       console.error(e)
