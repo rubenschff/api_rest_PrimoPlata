@@ -27,17 +27,18 @@ export const create = async (usuario: Omit<IUsuario, 'id'>): Promise<object| Err
             return user
         }
 
+
         await FinanceiroProvider.create({
             usuarioId: user[0].id,
-            arrecadado:0,
-            acumulado:0,
             disponivel:100
         })
+
+
+
         const accessToken = JWTservice.sign({uid: user[0].id})
         return {...user[0],accessToken: accessToken};
 
 
-        return Error('Erro ao inserir registro');
     }  catch (e) {
         console.log(e);
         return Error('Erro ao inserir registro');

@@ -7,7 +7,7 @@ export const getById = async (usuario:number, investimento:number):Promise<ITota
 
     try {
 
-        let totalizadorUsuario:ITotalizadorDto[] = []
+        let totalizadorUsuario:ITotalizadorDto[]|Error = []
 
             if (investimento != 0){
                 totalizadorUsuario = await Knex(ETableNames.transacao_totalizador)
@@ -36,11 +36,12 @@ export const getById = async (usuario:number, investimento:number):Promise<ITota
                     .where(TransacaoTotalizadorTable.usuarioId,usuario)
             }
 
-            if (totalizadorUsuario.length > 0){
+            if (totalizadorUsuario.length == 0){
                 return totalizadorUsuario
             }
 
-        return Error('Não foi possivel recuperar o registro')
+           return totalizadorUsuario
+
     }catch (e) {
         console.log(e);
         return Error('Não foi possivel recuperar o registro')

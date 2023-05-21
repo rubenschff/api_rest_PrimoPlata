@@ -17,7 +17,7 @@ export const getByIdValidation = validation((getSchema) => ({
         authorization: yup.string().required()
     })),
     query: getSchema<IQueryProperties>(yup.object().shape({
-        investimento: yup.number().integer().notRequired().default(0).oneOf([1,2,3]),
+        investimento: yup.number().integer().notRequired().default(0).oneOf([0,1,2,3]),
     })),
 }));
 export const getByUserId = async (req: Request<IParamProperties,{},{},IQueryProperties>, res: Response) => {
