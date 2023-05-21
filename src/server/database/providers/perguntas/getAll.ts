@@ -10,11 +10,7 @@ interface Perguntas_Respostas extends IPerguntasDTO {
     situacao: number,
     alternativas: IAlternativaDTO[]
 }
-enum addData {
-    respostas = 'respostas',
-    situacao = 'situacao',
-    alternativas = 'alternativas'
-}
+
 export const getAll = async (page: number, limit: number, filter: string, userId: number , pergunta:number): Promise<Perguntas_Respostas[]|Error> =>{
 
     try {

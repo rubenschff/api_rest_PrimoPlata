@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { PerguntaProvider } from '../../database/providers/perguntas';
 import {RespostaProvider} from "../../database/providers/resposta";
-import {CookieDto} from "../../database/models";
+import {CookieDto, IAlternativaDTO, IRespostaDTO} from "../../database/models";
 import {JWTservice} from "../../shared/services/JWTservice";
 import {SituacaoPergunta} from "../../database/enums";
 
@@ -13,6 +13,20 @@ interface IQueryProperties {
     page?: number;
     limit?: number;
     filter?: string;
+  }
+
+  interface PerguntaDTO {
+      usuarioId: number;
+      respostas: IRespostaDTO[];
+      pergunta: {
+          id: number;
+          descricao: string;
+          explicacao: string;
+          alternativas: IAlternativaDTO[];
+          alternativaCorreta: number;
+          recompensa: number;
+          situacao: number;
+      }
   }
 
   interface IParamProperties extends CookieDto{ }
@@ -51,8 +65,7 @@ export const getAllValidation = validation((getSchema) => ({
               return res.status(StatusCodes.BAD_REQUEST).json(result.message)
           }
 
-
-          console.log(result)
+          let perguntas: PerguntaDTO[] = []
          if (result.length>0){
 
              for (let i in result){
@@ -66,11 +79,25 @@ export const getAllValidation = validation((getSchema) => ({
                       }
 
                   }
+
+                 perguntas.push({
+                     usuarioId: auth.uid,
+                     respostas: result[i].respostas,
+                     pergunta: {
+                         id: result[i].id,
+                         descricao: result[i].descricao,
+                         explicacao: result[i].explicacao,
+                         alternativas: result[i].alternativas,
+                         alternativaCorreta: result[i].alternativaCorreta,
+                         recompensa: result[i].recompensa,
+                         situacao: result[i].situacao
+                     }
+                 })
               }
           }
 
 
-          return res.status(StatusCodes.OK).json(result);
+          return res.status(StatusCodes.OK).json(perguntas);
       }
 
 
