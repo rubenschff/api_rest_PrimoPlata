@@ -39,7 +39,7 @@ export const proxima_pergunta = async (req: Request<IParamProperties> , res: Res
 
         const result = format_pergunta(proxima_pergunta, auth.uid)
 
-        return res.status(StatusCodes.OK).json(result);
+        return res.status(StatusCodes.OK).json(result[0]);
 
     }
 
