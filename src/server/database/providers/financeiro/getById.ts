@@ -29,7 +29,7 @@ export const getByUserId = async (userId: number): Promise< IFinanceiroDTO | Err
                 return totalizadores
             }
 
-
+            financeiro[0].acumulado = 0
             totalizadores.map(totalizador => {
                 financeiro[0].acumulado! += totalizador.valorAcumulado == undefined ? 0 : totalizador.valorAcumulado
             })
