@@ -3,7 +3,7 @@ import * as yup from "yup";
 import {Request, Response} from "express";
 import {StatusCodes} from "http-status-codes";
 import {UsuarioProvider} from "../../database/providers/usuario";
-import {ComparativoProvider} from "../../database/providers/comparativo";
+import {FinanceiroProvider} from "../../database/providers/financeiro";
 import {CookieDto} from "../../database/models";
 import {JWTservice} from "../../shared/services/JWTservice";
 
@@ -26,7 +26,7 @@ export const getByUserId = async (req: Request<IParamProperties>, res: Response)
     const auth = JWTservice.verify(req.headers.authorization)
 
     if (typeof auth === 'object'){
-        const getComparativo = await ComparativoProvider.getByUserId(auth.uid);
+        const getComparativo = await FinanceiroProvider.getByUserId(auth.uid);
         console.log(getComparativo);
         if(getComparativo instanceof Error){
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

@@ -1,9 +1,10 @@
 
-export interface IComparativoDTO {
+export interface IFinanceiroDTO {
     id: number;
-    moedasRecebidas?: number;
-    moedasTotais?: number;
-    moedasDisponiveis?: number;
-
+    arrecadado?: number;
+    acumulado?: number;
+    disponivel?: number;
+    compras?: number;
+    vendas?: number
     usuarioId: number;
 }

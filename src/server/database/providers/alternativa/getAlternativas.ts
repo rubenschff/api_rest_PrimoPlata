@@ -3,25 +3,28 @@ import { Knex } from "../../knex";
 import { IAlternativaDTO } from "../../models";
 
 
-export const getAlternativas = async (idPergunta: number):Promise<IAlternativaDTO|Error> => {
-        try {
+export const getAlternativas = async (idPergunta: number):Promise<IAlternativaDTO[]> => {
+
 
             const result = await Knex(ETableNames.alternativas)
-                .select<IAlternativaDTO>(
-                    AlternativasTable.id,
-                    AlternativasTable.descricao,
-                    AlternativasTable.explicacao)
+                .select<IAlternativaDTO[]>('*')
                 .where(AlternativasTable.perguntaId, idPergunta)
 
             if (result instanceof Error){
                 console.log(result)
-                return Error('Não foi possivel recuperar as alternativas')
             }
 
-            return result
+            let alternativas: IAlternativaDTO[] = []
 
-        }catch (error) {
-            console.log(error)
-            return Error('Não foi possivel recuperar as alternativas')
-        }
+            result.map(result => {
+                alternativas.push({
+                    id: parseInt(result.id.toString()),
+                    descricao: result.descricao,
+                    explicacao: result.explicacao,
+                    perguntaId: parseInt(result.perguntaId.toString())
+                })
+            })
+
+            return alternativas
+
 }

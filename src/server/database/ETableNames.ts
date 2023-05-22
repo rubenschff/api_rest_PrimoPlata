@@ -4,8 +4,16 @@ export enum ETableNames{
     perguntas = 'perguntas',
     alternativas = 'alternativas',
     accessLogs = 'accessLogs',
-    comparacao = 'comparacao',
-    pergunta_resposta= 'pergunta_resposta'
+    financeiro = 'financeiro',
+    pergunta_resposta= 'pergunta_resposta',
+    investimento_fixo= 'investimento_fixo',
+    investimento_variavel = 'investimento_variavel',
+    transacao = 'transacao',
+    transacao_fixa = 'transacao_fixa',
+    transacao_variavel = 'transacao_variavel',
+    transacao_totalizador = 'transacao_totalizador',
+    transacao_usuario = 'transacao_usuario'
+    
 }
 
 export enum UsuarioTable {
@@ -22,7 +30,27 @@ export enum InvestimentoTable {
     risco = 'risco',
     juro = 'juro',
     liquidez = 'liquidez',
-    imagem = 'imagem'
+    imagem = 'imagem',
+    explicacao = 'explicacao'
+}
+
+export enum InvestimentoFixoTable {
+    id = 'id',
+    investimentoId = 'investimentoId',
+    juro = 'juro',
+    aporteInicial = 'aporteInicial',
+    diaParaCreditar = 'diaParaCreditar',
+    investimentoReferencePK = 'investimento.id'
+}
+
+export enum InvestimentoVariavelTable {
+    id = 'id',
+    investimentoId = 'investimentoId',
+    preco = 'preco',
+    dividendo = 'dividendo',
+    diaParaAtualizar = 'diaParaAtualizar',
+    manutencao = 'manutencao',
+    investimentoReferencePK = 'investimento.id'
 }
 
 export enum PerguntasTable {
@@ -48,18 +76,70 @@ export enum AccessLogTable {
     usuarioReferencePK = 'usuario.id'
 }
 
-export enum ComparacaoTable {
+export enum FinanceiroTable {
     id = 'id',
-    moedasRecebidas = 'moedasRecebidas',
-    moedasTotais = 'moedasTotais',
-    moedasDisponiveis = 'moedasDisponiveis',
+    arrecadado = 'arrecadado',
+    acumulado = 'acumulado',
+    disponivel = 'disponivel',
+    compras = 'compras',
+    vendas = 'vendas',
     usuarioId = 'usuarioId',
     usuarioReferencePK = 'usuario.id'
 }
 
 export enum RespostaTable {
+    id = 'id',
     idUsuario = 'idUsuario',
     idPergunta = 'idPergunta',
     idAlternativa = 'idAlternativa',
     createdAt = 'createdAt'
+}
+
+export enum TransacaoTable{
+    id = 'id',
+    usuarioId = 'usuarioId',
+    investimentoId = 'investimentoId',
+    tipo = 'tipo',
+    situacao = 'situacao',
+    log = 'log',
+    usuarioReferencePK = 'usuario.id',
+    investimentoReferencePK = 'investimento.id'
+}
+
+export enum TransacaoFixaTable{
+    id = 'id',
+    transacaoId = 'transacaoId',
+    valor = 'valor',
+    transacaoReferencePK = 'transacao.id'
+}
+
+export enum TransacaoVariavelTable{
+    id = 'id',
+    transacaoId = 'transacaoId',
+    valorCota = 'valorCota',
+    quantidadeCotas = 'quantidadeCotas',
+    dividendo = 'dividendo',
+    transacaoReferencePK = 'transacao.id'
+}
+
+export enum TransacaoTotalizadorTable{
+    id = 'id',
+    investimentoId = 'investimentoId',
+    usuarioId = 'usuarioId',
+    valorInicial = 'valorInicial',
+    valorAcumulado = 'valorAcumulado',
+    quantidadeCotas = 'quantidadeCotas',
+    investimentoReferencePK = 'investimento.id',
+    usuarioReferencePK = 'usuario.id'
+}
+
+export enum TransacaoUsuarioTable {
+    usuarioId = 'usuarioId',
+    investimentoId = 'investimentoId',
+    transacaoId = 'transacaoId',
+    usuarioReferencePK = 'usuario.id',
+    investimentoReferencePK = 'investimento.id',
+    transacaoReferencePK = 'transacao.id'
+
+
 }

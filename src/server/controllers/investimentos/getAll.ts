@@ -3,6 +3,16 @@ import { StatusCodes } from "http-status-codes";
 import * as yup from "yup";
 import { validation } from "../../shared/middleware";
 import { investimentoProvider } from "../../database/providers/investimento";
+import {CookieDto, IinvestimentoDTO} from "../../database/models";
+import {JWTservice} from "../../shared/services/JWTservice";
+import {ITotalizadorDto} from "../../database/models/totalizador.dto";
+import {TotalizadorProvider} from "../../database/providers/totalizador";
+
+interface IHeaderProperties extends CookieDto{ }
+
+interface Investimentos extends IinvestimentoDTO{
+    totalizador?: ITotalizadorDto | Error
+}
 
 interface IQueryProperties {
   id? : number;
@@ -12,7 +22,10 @@ interface IQueryProperties {
 }
 
 export const getAllValidation = validation((getSchema) => ({
-  query: getSchema<IQueryProperties>(yup.object().shape({
+    header: getSchema<IHeaderProperties>(yup.object().shape({
+        authorization: yup.string().required(),
+    })),
+    query: getSchema<IQueryProperties>(yup.object().shape({
     page: yup.number().notRequired().moreThan(0),
     limit: yup.number().notRequired().moreThan(0),
     id: yup.number().integer().notRequired().default(0),
@@ -23,19 +36,41 @@ export const getAllValidation = validation((getSchema) => ({
 //cria o usuário
 export const getAll = async (req: Request<{}, {}, {},IQueryProperties>, res: Response) => {
 
-    const result = await investimentoProvider.getAll(req.query.page || 1, req.query.limit || 10, req.query.filter || '', Number(req.query.id) || 0);
-
-    if(result instanceof Error){
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        default:{
-          error: result.message
-        }
-      });
+    if (!req.headers.authorization) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            default: {
+                error: 'O token precisa ser informado no header'
+            }
+        })
     }
 
-    res.setHeader('access-control-expose-headers', 'x-total-count');
-    res.setHeader('x-total-count','count')
+    const auth = JWTservice.verify(req.headers.authorization!)
 
-    console.log(result)
-    return res.status(StatusCodes.OK).json(result);
+    if (typeof auth ==='object'){
+
+        const result:Investimentos[]|Error = await investimentoProvider.getAll(req.query.page || 1, req.query.limit || 10, req.query.filter || '', Number(req.query.id) || 0);
+        console.log(result)
+        if(result instanceof Error){
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                default:{
+                    error: result.message
+                }
+            });
+        }
+
+
+        for (let i in result){
+            result[i].totalizador = await TotalizadorProvider.create({
+                investimentoId: result[i].id,
+                usuarioId: auth.uid
+            })
+        }
+
+        res.setHeader('access-control-expose-headers', 'x-total-count');
+        res.setHeader('x-total-count','count')
+
+        console.log(result)
+        return res.status(StatusCodes.OK).json(result);
+    }
+
 };
