@@ -34,7 +34,7 @@ export const proximaPergunta = async (usuario:number):Promise<Error|Perguntas_Re
       const disponivel = await PerguntasDisponiveis(perguntasRespostas_situacao);
 
       if (disponivel.length > 0){
-          return disponivel
+          return [disponivel[0]]
       }else {
           return [perguntasRespostas_situacao[perguntasRespostas_situacao.length-1]]
       }
