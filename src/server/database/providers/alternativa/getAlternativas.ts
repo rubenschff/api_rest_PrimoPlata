@@ -21,7 +21,6 @@ export const getAlternativas = async (idPergunta: number):Promise<IAlternativaDT
                     id: parseInt(result.id.toString()),
                     descricao: result.descricao,
                     explicacao: result.explicacao,
-                    alternativa: result.alternativa,
                     perguntaId: parseInt(result.perguntaId.toString())
                 })
             })

@@ -7,6 +7,8 @@ import {JWTservice} from "../../shared/services/JWTservice";
 import {PerguntaProvider} from "../../database/providers/perguntas";
 import {StatusCodes} from "http-status-codes";
 import {PerguntasController} from "../perguntas";
+import {format_pergunta} from "../../helper/format_pergunta";
+import {proxima_pergunta} from "../perguntas/proxima_pergunta";
 
 interface IBodyProps extends Omit<IRespostaDTO, 'id'|'idUsuario'> {}
 
@@ -49,8 +51,10 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) =>
             })
         }
 
+            const proxima = format_pergunta(proximapergunta, auth.uid)
 
-            return res.status(StatusCodes.OK).json();
+            console.log(proximapergunta[0])
+            return res.status(StatusCodes.OK).json(proxima[0]);
 
 
     }
