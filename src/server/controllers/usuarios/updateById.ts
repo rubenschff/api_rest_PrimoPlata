@@ -19,11 +19,11 @@ export const updateByIdValidation = validation((getSchema) => ({
     authorization: yup.string().required(),
   })),
   body: getSchema<IBodyPropeties>(yup.object().shape({
-    name: yup.string().notRequired().min(3).max(150),
+    name: yup.string().notRequired().min(4).max(150),
     nickName: yup.string().notRequired().min(6),
-    password: yup.string().notRequired().min(4),
+    password: yup.string().notRequired().min(6),
       dateOfBirth: yup.date().notRequired(),
-      oldPassword: yup.string().notRequired().min(4)
+      oldPassword: yup.string().notRequired().min(6)
   })),
 }));
 
@@ -31,7 +31,7 @@ export const updateByIdValidation = validation((getSchema) => ({
 export const updateById = async (req: Request<IHeaderProperties,{},IBodyPropeties>, res: Response) => {
 
     if (!req.headers.authorization){
-        return res.status(StatusCodes.BAD_REQUEST).json({
+        return res.status(StatusCodes.UNAUTHORIZED).json({
             default:{
                 error: 'O token precisa ser informado no header'
             }
@@ -50,10 +50,10 @@ export const updateById = async (req: Request<IHeaderProperties,{},IBodyPropetie
 
         if(req.body.password || req.body.oldPassword){
             if (!req.body.oldPassword){
-                return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+                return res.status(StatusCodes.UNAUTHORIZED)
                     .json({error: 'Informe a senha antiga no campo oldPassword'})
             } else if (!req.body.password){
-                return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+                return res.status(StatusCodes.UNAUTHORIZED)
                     .json({error: 'Informe a senha no campo password'})
             }
 
