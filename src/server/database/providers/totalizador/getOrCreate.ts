@@ -3,9 +3,9 @@ import {Knex} from "../../knex";
 import {ETableNames, TransacaoTotalizadorTable} from "../../ETableNames";
 
 
-export const create = async (totalizador: Omit<ITotalizadorDto, 'id'|'quantidadeCotas'|'valorInicial'|'valorAcumulado'>):Promise<ITotalizadorDto|Error> => {
+export const getOrCreate = async (totalizador: Omit<ITotalizadorDto, 'id'|'quantidadeCotas'|'valorInicial'|'valorAcumulado'>):Promise<ITotalizadorDto|Error> => {
     try {
-        console.log(totalizador)
+
         const totalizadorExiste = await Knex(ETableNames.transacao_totalizador)
                      .select<ITotalizadorDto[]>([
                          TransacaoTotalizadorTable.id,

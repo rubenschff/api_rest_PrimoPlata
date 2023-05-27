@@ -5,7 +5,7 @@ import {FinanceiroProvider} from "../../database/providers/financeiro";
 import {TotalizadorProvider} from "../../database/providers/totalizador";
 import {ITotalizadorDto} from "../../database/models/totalizador.dto";
 import {SituacaoTransacao, TipoTransacao} from "../../database/enums";
-import {TransacaoFixoProvider} from "../../database/providers/investimento_compra_venda";
+import {TransacaoFixoProvider} from "../../database/providers/transacoes";
 import {investimentoProvider} from "../../database/providers/investimento";
 
 interface Processados extends IProcesarInvestimentos{ }
@@ -22,6 +22,8 @@ export const processarInvestimentos = async ():Promise<object|Error> => {
                ProcessarInvestimentosView.situacao,
                ProcessarInvestimentosView.valor
            ])
+
+       console.log(paraProcessar)
 
        if (paraProcessar.length > 0) {
            let userIDs:number[] = []

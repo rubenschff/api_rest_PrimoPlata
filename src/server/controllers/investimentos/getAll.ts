@@ -49,7 +49,6 @@ export const getAll = async (req: Request<{}, {}, {},IQueryProperties>, res: Res
     if (typeof auth ==='object'){
 
         const result:Investimentos[]|Error = await investimentoProvider.getAll(req.query.page || 1, req.query.limit || 10, req.query.filter || '', Number(req.query.id) || 0);
-        console.log(result)
         if(result instanceof Error){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 default:{
@@ -60,7 +59,7 @@ export const getAll = async (req: Request<{}, {}, {},IQueryProperties>, res: Res
 
 
         for (let i in result){
-            result[i].totalizador = await TotalizadorProvider.create({
+            result[i].totalizador = await TotalizadorProvider.getOrCreate({
                 investimentoId: result[i].id,
                 usuarioId: auth.uid
             })
@@ -69,7 +68,6 @@ export const getAll = async (req: Request<{}, {}, {},IQueryProperties>, res: Res
         res.setHeader('access-control-expose-headers', 'x-total-count');
         res.setHeader('x-total-count','count')
 
-        console.log(result)
         return res.status(StatusCodes.OK).json(result);
     }
 
