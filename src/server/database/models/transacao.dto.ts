@@ -9,5 +9,6 @@ export interface TransacaoDTO {
     valorTransacao?: number,
     valorCota?: number,
     quantidadeCotas?: number
+    log? : object
 }
 

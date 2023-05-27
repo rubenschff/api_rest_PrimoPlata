@@ -26,16 +26,15 @@ export const getByUserId = async (req: Request<IParamProperties>, res: Response)
     const auth = JWTservice.verify(req.headers.authorization)
 
     if (typeof auth === 'object'){
-        const getComparativo = await FinanceiroProvider.getByUserId(auth.uid);
-        console.log(getComparativo);
-        if(getComparativo instanceof Error){
+        const finaceiro = await FinanceiroProvider.getByUserId(auth.uid);
+        if(finaceiro instanceof Error){
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 default:{
-                    error: getComparativo.message
+                    error: finaceiro.message
                 }
             });
         }
-        return res.status(StatusCodes.OK).json(getComparativo);
+        return res.status(StatusCodes.OK).json(finaceiro);
     }
 
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

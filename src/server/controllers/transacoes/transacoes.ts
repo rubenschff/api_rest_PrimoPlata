@@ -15,7 +15,7 @@ import {FinanceiroTable} from "../../database/ETableNames";
 interface IHeaderProperties extends CookieDto{
 
 }
-interface IBodyProps extends Omit<TransacaoDTO, 'id'|'usuarioId' > { }
+interface IBodyProps extends Omit<TransacaoDTO, 'id'|'usuarioId'|'log' > { }
 
 export const transacaoValidation = validation((getSchema) => ({
     header: getSchema<IHeaderProperties>(yup.object().shape({
@@ -34,23 +34,23 @@ export const transacaoValidation = validation((getSchema) => ({
 
 export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => {
 
-    if (!req.headers.authorization) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            default: {
-                error: 'O token precisa ser informado no header'
-            }
-        })
-    }
-
     const auth = JWTservice.verify(req.headers.authorization!)
 
     if (typeof auth === 'object'){
 
+        const transacao:IBodyProps = req.body
+        const totalizador = await TotalizadorProvider.getOrCreate({
+            usuarioId: auth.uid,
+            investimentoId: transacao.investimentoId
+        })
 
-    const investimento:IBodyProps = req.body
-
-    //valida tipo de transação
-    if (TipoTransacao.COMPRA == investimento.tipo) {
+        if (totalizador instanceof Error) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                default: {
+                    error: totalizador.message
+                }
+            })
+        }
 
         const financeiro = await FinanceiroProvider.getByUserId(auth.uid)
 
@@ -62,12 +62,15 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
             })
         }
 
+    //valida tipo de transação
+    if (TipoTransacao.COMPRA == transacao.tipo) {
+
         //valida se há saldo disponível pra compra
-        if ((financeiro.disponivel! < investimento.valorTransacao!) || (financeiro.disponivel! < investimento.valorCota!)) {
+        if ((financeiro.disponivel! < transacao.valorTransacao!) || (financeiro.disponivel! < transacao.valorCota!)) {
             return res.status(StatusCodes.BAD_REQUEST).json({erro: 'Saldo indisponível para compra!'})
         }
 
-        const compra = await TransacaoController.Compra({...investimento, usuarioId:auth.uid})
+        const compra = await TransacaoController.compraVenda({...transacao, usuarioId:auth.uid}, financeiro, totalizador)
 
         if (compra instanceof Error) {
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -77,42 +80,19 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
             })
         }
 
-        await TotalizadorProvider.create({
-            usuarioId: auth.uid,
-            investimentoId: investimento.investimentoId
-        })
+        return res.status(StatusCodes.CREATED).json({
+            result: `Compra registrada no valor de ${transacao.valorTransacao!.toFixed(2)}`
+        });
 
-        await FinanceiroProvider.updateByUserId(
-            auth.uid,
-            {...financeiro, compras: financeiro.compras! + investimento.valorTransacao!}
-        )
-
-        return res.status(StatusCodes.CREATED).json({result: `Compra ${compra[0].id} registrada`});
-
-    } else if (TipoTransacao.VENDA == investimento.tipo) {
-
-        const financeiro = await FinanceiroProvider.getByUserId(auth.uid)
-
-        if (financeiro instanceof Error) {
-            return res.status(StatusCodes.BAD_REQUEST).json({error: financeiro.message})
-        }
-
-        const totalizador = await TotalizadorProvider.create({
-            usuarioId: auth.uid,
-            investimentoId: investimento.investimentoId
-        })
-
-        if (totalizador instanceof Error) {
-            return res.status(StatusCodes.BAD_REQUEST).json({erro: 'Não foi possivel recuperar o totalizador para comparação'})
-        }
-
+    } else if (TipoTransacao.VENDA == transacao.tipo) {
 
         //valida se há saldo disponível pra venda
-        if ((totalizador.valorAcumulado < investimento.valorTransacao!) || (totalizador.valorAcumulado < investimento.valorCota!)) {
+        if ((totalizador.valorAcumulado < transacao.valorTransacao!) || (totalizador.valorAcumulado < transacao.valorCota!)) {
             return res.status(StatusCodes.BAD_REQUEST).json({erro: 'Saldo indisponível para venda!'})
         }
 
-        const venda = await TransacaoController.venda({...investimento,usuarioId:auth.uid})
+        const venda = await TransacaoController
+            .compraVenda({...transacao,usuarioId:auth.uid}, financeiro, totalizador)
 
         if (venda instanceof Error) {
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -122,12 +102,9 @@ export const transacao = async (req:Request<{},{},IBodyProps>, res:Response) => 
             })
         }
 
-        await FinanceiroProvider.updateByUserId(
-            auth.uid,
-            {...financeiro, vendas: financeiro.vendas! + investimento.valorTransacao!}
-        )
-
-        return res.status(StatusCodes.CREATED).json({result: `Venda ${venda[0].id} registrada`});
+        return res.status(StatusCodes.CREATED).json({
+            result: `Venda registrada no valor de ${transacao.valorTransacao!.toFixed(2)}`
+        });
 
     } else {
         return res.status(StatusCodes.BAD_REQUEST).json({

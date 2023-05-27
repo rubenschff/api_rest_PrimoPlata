@@ -16,7 +16,6 @@ export const updateById = async (totalizador:ITotalizadorDto) =>{
 
        if (update instanceof Error) return update
 
-       console.log(update)
        return update
 
 

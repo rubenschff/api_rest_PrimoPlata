@@ -1,7 +1,7 @@
 import { server } from './server/server';
 import * as dotenv from 'dotenv';
 import cron from 'node-cron'
-import {TotalizadorInvestimentoCron} from "./server/crons/totalizador_investimentos";
+import {TotalizadoresCron} from "./server/crons/totalizador_investimentos";
 
 dotenv.config();
 
@@ -9,7 +9,7 @@ dotenv.config();
 cron.schedule("0 5 * * *", async () => {
 
     console.log("------------------------------------Cron Processar Investimentos------------------------------------")
-     await TotalizadorInvestimentoCron.processarInvestimentos()
+     await TotalizadoresCron.processarTotalizadores
 
 });
 

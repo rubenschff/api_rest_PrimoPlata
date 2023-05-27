@@ -8,22 +8,20 @@ export const getByUserId = async (userId: number): Promise< IFinanceiroDTO | Err
         try {
             const financeiro:IFinanceiroDTO[] = await Knex(ETableNames.financeiro)
                 .select(
+                    FinanceiroTable.id,
                     FinanceiroTable.arrecadado,
                     FinanceiroTable.acumulado,
                     FinanceiroTable.disponivel,
                     FinanceiroTable.compras,
-                    FinanceiroTable.vendas
+                    FinanceiroTable.vendas,
+                    FinanceiroTable.usuarioId
                 )
                 .where('usuarioId',userId);
 
 
-            console.log("financeiro")
-            console.log(financeiro)
 
             const totalizadores = await TotalizadorProvider.getById(userId, 0)
 
-            console.log("totalizador")
-            console.log(totalizadores)
 
             if (totalizadores instanceof Error){
                 return totalizadores
