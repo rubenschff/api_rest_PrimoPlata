@@ -5,7 +5,6 @@ import {FinanceiroProvider} from "./index";
 
 
 export const create = async (financeiro: Omit<IFinanceiroDTO, 'id'>): Promise<number| Error> => {
-    console.log(financeiro)
     try {
         const update = await verifyUser(financeiro);
         if(typeof update === 'number'){
