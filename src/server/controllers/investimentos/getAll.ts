@@ -2,7 +2,7 @@ import { Request, RequestHandler, Response, query, request } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as yup from "yup";
 import { validation } from "../../shared/middleware";
-import { investimentoProvider } from "../../database/providers/investimento";
+import { InvestimentoProvider } from "../../database/providers/investimento";
 import {CookieDto, IinvestimentoDTO} from "../../database/models";
 import {JWTservice} from "../../shared/services/JWTservice";
 import {ITotalizadorDto} from "../../database/models/totalizador.dto";
@@ -48,7 +48,7 @@ export const getAll = async (req: Request<{}, {}, {},IQueryProperties>, res: Res
 
     if (typeof auth ==='object'){
 
-        const result:Investimentos[]|Error = await investimentoProvider.getAll(req.query.page || 1, req.query.limit || 10, req.query.filter || '', Number(req.query.id) || 0);
+        const result:Investimentos[]|Error = await InvestimentoProvider.getAll(req.query.page || 1, req.query.limit || 10, req.query.filter || '', Number(req.query.id) || 0);
         if(result instanceof Error){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 default:{
