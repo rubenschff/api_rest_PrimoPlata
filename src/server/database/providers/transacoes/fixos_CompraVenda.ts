@@ -8,7 +8,7 @@ import {IFinanceiroDTO} from "../../models";
 interface TransacaoFixa extends Omit<TransacaoDTO, 'valorCota'|'quantidadeCotas'|'id'>{
 
 }
-export const compra_fixos = async (transacao:TransacaoFixa) => {
+export const register_CompraVendaFixa = async (transacao:TransacaoFixa) => {
         try {
             //insert de transação
             const transacaoId = await Knex(ETableNames.transacao)
@@ -16,7 +16,8 @@ export const compra_fixos = async (transacao:TransacaoFixa) => {
                     usuarioId: transacao.usuarioId,
                     investimentoId: transacao.investimentoId,
                     tipo: transacao.tipo,
-                    situacao: transacao.situacao
+                    situacao: transacao.situacao,
+                    log: transacao.log
                 }).returning<[{ id: number }]>(TransacaoTable.id)
                 .catch(e=>{
                     return Error(e)

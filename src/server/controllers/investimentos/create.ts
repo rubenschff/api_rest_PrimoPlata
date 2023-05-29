@@ -3,7 +3,7 @@ import { IinvestimentoDTO } from "../../database/models";
 import { validation } from "../../shared/middleware";
 import { Request, RequestHandler, Response, query, request } from "express";
 import * as yup from "yup";
-import { investimentoProvider } from "../../database/providers/investimento";
+import { InvestimentoProvider } from "../../database/providers/investimento";
 
 
 interface IBodyProps extends Omit<IinvestimentoDTO, 'id'> {  };
@@ -20,7 +20,7 @@ interface IBodyProps extends Omit<IinvestimentoDTO, 'id'> {  };
   
   //cria o usuário
   export const create = async (req: Request<{}, {}, IBodyProps>, res: Response) => {
-    const result = await investimentoProvider.create(req.body);
+    const result = await InvestimentoProvider.create(req.body);
   
     if (result instanceof Error){
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

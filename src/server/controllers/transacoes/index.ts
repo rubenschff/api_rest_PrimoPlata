@@ -1,10 +1,8 @@
 import * as transacoes from './transacoes'
-import * as compra from './compra'
-import * as venda from './venda'
+import * as compraVenda from './compraVenda'
 
 
 export const TransacaoController = {
     ...transacoes,
-    ...compra,
-    ...venda
+    ...compraVenda,
 }

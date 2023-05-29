@@ -1,5 +1,5 @@
-import * as processarInvestimentos from './processarInvestimentos'
+import * as processarTotalizadores from './processarTotalizadores'
 
-export const TotalizadorInvestimentoCron = {
-    ...processarInvestimentos
+export const TotalizadoresCron = {
+    ...processarTotalizadores
 }

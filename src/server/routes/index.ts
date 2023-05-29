@@ -11,7 +11,7 @@ import {
 } from "../controllers";
 import { autenticateRoutes } from "../shared/middleware";
 import {RoutesEnum} from "./routes.enum";
-import {ProcessarInvestimentosController} from "../controllers/processar_investimentos";
+import {TotalizadoresCron} from "../crons/totalizador_investimentos";
 
 const router = Router();
 
@@ -72,7 +72,7 @@ router.get(RoutesEnum.totalizador, autenticateRoutes, TotalizadorController.getB
 router.post(RoutesEnum.transacao,autenticateRoutes, TransacaoController.transacaoValidation, TransacaoController.transacao)
 
 //-------------------------------------------------Processar Transações-------------------------------------------------
-router.post(RoutesEnum.processar, ProcessarInvestimentosController.processAll)
+router.post(RoutesEnum.processar, TotalizadoresCron.processarTotalizadores)
 
 export { router };
  
